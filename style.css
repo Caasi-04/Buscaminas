@@ -160,3 +160,8 @@ h1 {
 #retryButton:hover {
     background-color: #e5a476;
 }
+
+#attemptCounter {
+    font-size: 18px;
+    margin-top: 5px;
+}

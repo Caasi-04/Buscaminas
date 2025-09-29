@@ -1,4 +1,4 @@
-// version 1.1.3
+// version 1.1.4
 let board = [];
 let mineCount = 10;
 let flagsLeft = 10;
@@ -7,6 +7,8 @@ let firstClick = true;
 let cellsOpened = 0;
 let timerInterval = null;
 let startTime = null;
+let attemptCount = -1;
+
 
 
 const boardSizes = {
@@ -71,6 +73,7 @@ function startGame() {
     boardEl.style.gridTemplateColumns = `repeat(${width}, 30px)`;
     boardEl.style.gridTemplateRows = `repeat(${height}, 30px)`;
 
+    updateAttemptCounter();
     resetTimer();
     document.getElementById('retryButton').style.display = 'none';
 
@@ -289,6 +292,12 @@ function resetTimer() {
 function retryGame() {
     startGame(); // reinicia el juego con los mismos parámetros
 }
+
+function updateAttemptCounter() {
+    attemptCount++;
+    document.getElementById('attempts').innerText = attemptCount;
+}
+
 
 window.onload = () => {
     onBoardSizeChange();
