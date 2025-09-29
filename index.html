@@ -15,10 +15,12 @@
     <label>
       Tamaño:
       <select id="boardSize" onchange="onBoardSizeChange()">
+        <option value="mini">Mini</option>
         <option value="small">Pequeño</option>
         <option value="medium" selected>Mediano</option>
         <option value="large">Grande</option>
         <option value="huge">Enorme</option>
+        <option value="insane">Insano</option>
         <option value="custom">Personalizado</option>
       </select>
     </label>
@@ -26,21 +28,23 @@
     <label id="difficultyLabel">
       Dificultad:
       <select id="difficulty">
-        <option value="easy">Fácil</option>
-        <option value="medium" selected>Normal</option>
+        <option value="Veasy">Muy Fácil</option>
+        <option value="easy" >Fácil</option>
+        <option value="normal"selected>Normal</option>
         <option value="hard">Difícil</option>
         <option value="extreme">Extremo</option>
+        <option value="insane">Insano</option>
       </select>
     </label>
 
     <div id="customSettings">
       <label>
         Ancho:
-        <input type="number" id="customWidth" min="5" max="60" value="15" />
+        <input type="number" id="customWidth" min="5" value="15" />
       </label>
       <label>
         Alto:
-        <input type="number" id="customHeight" min="5" max="45" value="12" />
+        <input type="number" id="customHeight" min="5" value="12" />
       </label>
       <label id="customMinesLabel" style="display: none;">
         Minas:
@@ -66,7 +70,7 @@
   <footer style="margin-top: 20px; font-size: 14px; color: #888;">
     Created by Caasi04
     <br />
-    version 1.2.1
+    version 1.2.2
   </footer>
   <div id="clockOverlay"></div>
 </body>

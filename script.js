@@ -15,17 +15,21 @@ let currentSessionStart = null;
 
 
 const boardSizes = {
+    mini: 10,
     small: 15,
     medium: 24,
     large: 36,
-    huge: 48
+    huge: 48,
+    insane: 80,
 };
 
 const difficultyRatios = {
+    Veasy: 0.05,
     easy: 0.10,
-    medium: 0.20,
+    normal: 0.17,
     hard: 0.30,
-    extreme: 0.45
+    extreme: 0.38,
+    insane: 0.54,
 };
 
 function onBoardSizeChange() {
