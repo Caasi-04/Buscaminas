@@ -7,7 +7,7 @@ let firstClick = true;
 let cellsOpened = 0;
 let timerInterval = null;
 let startTime = null;
-let attemptCount = -1;
+let attemptCount = 0;
 let totalPlayTime = 0;        // en milisegundos
 let totalTimerInterval = null;
 let currentSessionStart = null;
@@ -76,7 +76,7 @@ function startGame() {
     boardEl.style.gridTemplateColumns = `repeat(${width}, 30px)`;
     boardEl.style.gridTemplateRows = `repeat(${height}, 30px)`;
 
-    updateAttemptCounter();
+    
     resetTimer();
     document.getElementById('retryButton').style.display = 'none';
 
@@ -236,13 +236,17 @@ function checkWin() {
 }
 
 function endGame(won) {
-    
-
     gameOver = true;
     stopTimer();
 
     if (!won) {
-        // Revelar minas y mostrar botón de reinicio
+        // ✅ Solo contar intento si se hizo el primer clic
+        if (!firstClick) {
+            attemptCount++;
+            document.getElementById('attempts').innerText = attemptCount;
+        }
+
+        // Mostrar minas y errores
         for (let r = 0; r < board.length; r++) {
             for (let c = 0; c < board[0].length; c++) {
                 const cell = board[r][c];
@@ -261,8 +265,10 @@ function endGame(won) {
         }
 
         document.getElementById('retryButton').style.display = 'inline-block';
+        showRetryMessage();
 
     } else {
+        // Ganar
         for (let r = 0; r < board.length; r++) {
             for (let c = 0; c < board[0].length; c++) {
                 const cell = board[r][c];
@@ -275,6 +281,8 @@ function endGame(won) {
         }
     }
 }
+
+
 
 
 function startTimer() {
@@ -439,7 +447,6 @@ function startGame() {
     boardEl.style.gridTemplateColumns = `repeat(${width}, 30px)`;
     boardEl.style.gridTemplateRows = `repeat(${height}, 30px)`;
 
-    updateAttemptCounter();
     resetTimer();
     document.getElementById('retryButton').style.display = 'none';
 
