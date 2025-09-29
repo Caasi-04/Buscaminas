@@ -8,6 +8,9 @@ let cellsOpened = 0;
 let timerInterval = null;
 let startTime = null;
 let attemptCount = -1;
+let totalPlayTime = 0;        // en milisegundos
+let totalTimerInterval = null;
+let currentSessionStart = null;
 
 
 
@@ -233,6 +236,8 @@ function checkWin() {
 }
 
 function endGame(won) {
+    
+
     gameOver = true;
     stopTimer();
 
@@ -298,11 +303,50 @@ function updateAttemptCounter() {
     attemptCount++;
     document.getElementById('attempts').innerText = attemptCount;
 }
+function startTotalTimer() {
+    currentSessionStart = Date.now();
+
+    totalTimerInterval = setInterval(() => {
+        const currentElapsed = Date.now() - currentSessionStart;
+        const total = totalPlayTime + currentElapsed;
+        document.getElementById('totalTime').innerText = formatTime(total);
+    }, 1000);
+}
+
+function updateClock() {
+    const now = new Date();
+
+    const time = now.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+
+    const date = now.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+
+    const timezoneOffset = -now.getTimezoneOffset() / 60;
+    const timezone = `GMT${timezoneOffset >= 0 ? '+' : ''}${timezoneOffset}`;
+
+    document.getElementById('clockOverlay').innerHTML = `
+        <div><strong>${time}</strong></div>
+        <div>${date}</div>
+        <div>${timezone}</div>
+    `;
+}
+
+// Actualizar cada segundo
+setInterval(updateClock, 1000);
+window.addEventListener('load', updateClock);
 
 
 window.onload = () => {
     onBoardSizeChange();
     startGame();
+    startTotalTimer();
 };
 
 function formatTime(ms) {

@@ -165,3 +165,18 @@ h1 {
     font-size: 18px;
     margin-top: 5px;
 }
+#clockOverlay {
+    position: fixed;
+    top: 10px;
+    right: 15px;
+    background-color: rgba(46, 52, 64, 0.9);
+    color: #eceff4;
+    font-size: 14px;
+    font-family: monospace;
+    padding: 8px 12px;
+    border-radius: 8px;
+    z-index: 1000;
+    text-align: right;
+    line-height: 1.4;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
