@@ -275,10 +275,11 @@ function endGame(won) {
 function startTimer() {
     startTime = Date.now();
     timerInterval = setInterval(() => {
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        document.getElementById('timeElapsed').innerText = elapsed;
+        const elapsed = Date.now() - startTime;
+        document.getElementById('timeElapsed').innerText = formatTime(elapsed);
     }, 1000);
 }
+
 
 function stopTimer() {
     clearInterval(timerInterval);
@@ -286,7 +287,7 @@ function stopTimer() {
 
 function resetTimer() {
     clearInterval(timerInterval);
-    document.getElementById('timeElapsed').innerText = '0';
+    document.getElementById('timeElapsed').innerText = '00:00:00';
 }
 
 function retryGame() {
@@ -303,3 +304,16 @@ window.onload = () => {
     onBoardSizeChange();
     startGame();
 };
+
+function formatTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return [
+        hours.toString().padStart(2, '0'),
+        minutes.toString().padStart(2, '0'),
+        seconds.toString().padStart(2, '0')
+    ].join(':');
+}
