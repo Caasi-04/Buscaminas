@@ -180,3 +180,16 @@ h1 {
     line-height: 1.4;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
+#gameStatusBar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color: rgba(46, 52, 64, 0.95);
+    padding: 8px 12px;
+    border-bottom: 1px solid #4c566a;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    font-size: 20px;
+}
