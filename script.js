@@ -361,3 +361,113 @@ function formatTime(ms) {
         seconds.toString().padStart(2, '0')
     ].join(':');
 }
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        const retryBtn = document.getElementById('retryButton');
+        if (retryBtn && retryBtn.offsetParent !== null) { // Verifica que esté visible
+            retryBtn.click();
+        }
+    }
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === ' ' || e.key === 'Spacebar') {
+    e.preventDefault(); // Siempre previene el scroll con espacio
+  }
+});
+
+window.onload = () => {
+    // Detectar cambios en parámetros y actualizar juego automáticamente
+    document.getElementById('boardSize').addEventListener('change', startGame);
+    document.getElementById('difficulty').addEventListener('change', startGame);
+    document.getElementById('customWidth').addEventListener('input', startGame);
+    document.getElementById('customHeight').addEventListener('input', startGame);
+    document.getElementById('customMines').addEventListener('input', startGame);
+
+    onBoardSizeChange();
+    startGame();
+    startTotalTimer();
+};
+
+// Bloquear scroll por espacio siempre
+document.addEventListener('keydown', function(e) {
+  if (e.key === ' ' || e.key === 'Spacebar') {
+    e.preventDefault();
+  }
+});
+
+// Reiniciar juego con Enter o espacio, solo si el botón está visible
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+        const retryBtn = document.getElementById('retryButton');
+        if (retryBtn && retryBtn.offsetParent !== null) {
+            retryBtn.click();
+        }
+    }
+});
+
+function startGame() {
+    // Reinicia estado pero NO inicia timer ni coloca minas
+    let width, height;
+    const size = document.getElementById('boardSize').value;
+
+    if (size === 'custom') {
+        width = parseInt(document.getElementById('customWidth').value);
+        height = parseInt(document.getElementById('customHeight').value);
+        mineCount = parseInt(document.getElementById('customMines').value);
+    } else {
+        width = boardSizes[size];
+        height = Math.ceil(width * 0.8);
+        const difficulty = document.getElementById('difficulty').value;
+        const ratio = difficultyRatios[difficulty];
+        mineCount = Math.round(width * height * ratio);
+    }
+
+    if (mineCount >= width * height) mineCount = width * height - 1;
+    if (mineCount < 1) mineCount = 1;
+
+    flagsLeft = mineCount;
+    gameOver = false;
+    firstClick = true;  // El primer click iniciará minas y tiempo
+    cellsOpened = 0;
+
+    document.getElementById('flagsLeft').innerText = flagsLeft;
+
+    const boardEl = document.getElementById('board');
+    boardEl.innerHTML = '';
+    boardEl.style.gridTemplateColumns = `repeat(${width}, 30px)`;
+    boardEl.style.gridTemplateRows = `repeat(${height}, 30px)`;
+
+    updateAttemptCounter();
+    resetTimer();
+    document.getElementById('retryButton').style.display = 'none';
+
+    board = [];
+
+    for (let r = 0; r < height; r++) {
+        board[r] = [];
+        for (let c = 0; c < width; c++) {
+            const cell = {
+                row: r,
+                col: c,
+                mine: false,
+                opened: false,
+                flagged: false,
+                question: false,
+                element: document.createElement('div'),
+                adjacent: 0
+            };
+
+            cell.element.classList.add('cell');
+            cell.element.addEventListener('click', () => handleLeftClick(cell));
+            cell.element.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                handleRightClick(cell);
+            });
+
+            boardEl.appendChild(cell.element);
+            board[r][c] = cell;
+        }
+    }
+}
