@@ -1,10 +1,13 @@
-// version 1.1.2
+// version 1.1.3
 let board = [];
 let mineCount = 10;
 let flagsLeft = 10;
 let gameOver = false;
 let firstClick = true;
 let cellsOpened = 0;
+let timerInterval = null;
+let startTime = null;
+
 
 const boardSizes = {
     small: 15,
@@ -67,6 +70,10 @@ function startGame() {
     boardEl.innerHTML = '';
     boardEl.style.gridTemplateColumns = `repeat(${width}, 30px)`;
     boardEl.style.gridTemplateRows = `repeat(${height}, 30px)`;
+
+    resetTimer();
+    document.getElementById('retryButton').style.display = 'none';
+
 
     board = [];
 
@@ -138,25 +145,27 @@ function handleLeftClick(cell) {
     if (gameOver || cell.opened || cell.flagged) return;
 
     if (firstClick) {
-    placeMines(cell.row, cell.col);
-    firstClick = false;
+        placeMines(cell.row, cell.col);
+        firstClick = false;
+        startTimer();  // ⏱ Iniciar cronómetro
     }
 
     openCell(cell);
 
     if (cell.mine) {
-    cell.element.classList.add('mine-transform');
-    cell.element.innerText = '💣';
-    setTimeout(() => {
-        cell.element.innerText = '💥';
-    }, 400);
-    endGame(false);
+        cell.element.classList.add('mine-transform');
+        cell.element.innerText = '💣';
+        setTimeout(() => {
+            cell.element.innerText = '💥';
+        }, 400);
+        endGame(false);
     }
 
     if (checkWin()) {
-    endGame(true);
+        endGame(true);
     }
 }
+
 
 function openCell(cell) {
     if (cell.opened || cell.flagged) return;
@@ -222,35 +231,63 @@ function checkWin() {
 
 function endGame(won) {
     gameOver = true;
+    stopTimer();
+
     if (!won) {
-    for (let r = 0; r < board.length; r++) {
-        for (let c = 0; c < board[0].length; c++) {
-        const cell = board[r][c];
-        if (cell.mine) {
-            cell.element.innerText = '💣';
-            cell.element.classList.remove('flag', 'question');
-            cell.element.classList.add('mine-transform');
-            setTimeout(() => {
-            cell.element.innerText = '💥';
-            }, 400);
-        } else if (cell.flagged) {
-            cell.element.innerText = '❌';
-            cell.element.classList.remove('flag');
+        // Revelar minas y mostrar botón de reinicio
+        for (let r = 0; r < board.length; r++) {
+            for (let c = 0; c < board[0].length; c++) {
+                const cell = board[r][c];
+                if (cell.mine) {
+                    cell.element.innerText = '💣';
+                    cell.element.classList.remove('flag', 'question');
+                    cell.element.classList.add('mine-transform');
+                    setTimeout(() => {
+                        cell.element.innerText = '💥';
+                    }, 400);
+                } else if (cell.flagged) {
+                    cell.element.innerText = '❌';
+                    cell.element.classList.remove('flag');
+                }
+            }
         }
-        }
-    }
+
+        document.getElementById('retryButton').style.display = 'inline-block';
+
     } else {
-    for (let r = 0; r < board.length; r++) {
-        for (let c = 0; c < board[0].length; c++) {
-        const cell = board[r][c];
-        if (cell.mine) {
-            cell.element.innerText = '🌸';
-            cell.element.classList.add('mine-flower');
-            cell.element.classList.remove('flag', 'question');
-        }
+        for (let r = 0; r < board.length; r++) {
+            for (let c = 0; c < board[0].length; c++) {
+                const cell = board[r][c];
+                if (cell.mine) {
+                    cell.element.innerText = '🌸';
+                    cell.element.classList.add('mine-flower');
+                    cell.element.classList.remove('flag', 'question');
+                }
+            }
         }
     }
-    }
+}
+
+
+function startTimer() {
+    startTime = Date.now();
+    timerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        document.getElementById('timeElapsed').innerText = elapsed;
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+}
+
+function resetTimer() {
+    clearInterval(timerInterval);
+    document.getElementById('timeElapsed').innerText = '0';
+}
+
+function retryGame() {
+    startGame(); // reinicia el juego con los mismos parámetros
 }
 
 window.onload = () => {

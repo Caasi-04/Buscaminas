@@ -141,3 +141,22 @@ h1 {
     margin-top: 10px;
     display: none;
 }
+
+#timer {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+#retryButton {
+    padding: 8px 16px;
+    background-color: #d08770;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#retryButton:hover {
+    background-color: #e5a476;
+}
