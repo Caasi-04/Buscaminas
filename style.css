@@ -193,3 +193,107 @@ h1 {
     gap: 40px;
     font-size: 20px;
 }
+
+/* --- Barra de consejos --- */
+#tipBar {
+    background-color: #4c566a;
+    color: #d8dee9;
+    padding: 10px 15px;
+    font-weight: 600;
+    border-radius: 5px;
+    user-select: none;
+    margin-bottom: 15px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 8px rgba(76, 86, 106, 0.7);
+}
+
+/* --- Ventana modal --- */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(46, 52, 64, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background-color: #3b4252;
+    padding: 25px 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    color: #eceff4;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(101, 123, 131, 0.8);
+}
+
+.modal-content h2 {
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #88c0d0;
+}
+
+.modal-content p, 
+.modal-content ul {
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.modal-content ul {
+    padding-left: 20px;
+}
+
+#closeModalBtn {
+    display: block;
+    margin: 20px auto 0 auto; /* Centra horizontalmente y espacio arriba */
+    padding: 15px 30px;
+    background-color: #5e81ac;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: fit-content; /* Ajusta ancho al contenido */
+}
+
+#closeModalBtn:hover {
+    background-color: #81a1c1;
+}
+
+
+.modal-content {
+    background-color: #3b4252; /* Color oscuro para que combine con tu tema */
+    color: #eceff4;
+    width: 550px; /* Más ancha */
+    max-width: 90vw; /* Que no se pase del ancho de pantalla */
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+    margin: auto;
+    text-align: left; /* Que el texto se alinee a la izquierda */
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(46, 52, 64, 0.85); /* Fondo semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}

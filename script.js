@@ -1,4 +1,4 @@
-// version 1.1.4
+// version 1.3.0
 let board = [];
 let mineCount = 10;
 let flagsLeft = 10;
@@ -12,6 +12,49 @@ let totalPlayTime = 0;        // en milisegundos
 let totalTimerInterval = null;
 let currentSessionStart = null;
 
+const tips = [
+    "💡 Consejo: Recuerda marcar las minas 💣 con banderas 🚩 para no explotarlas accidentalmente.",
+    "💡 Consejo: No te desesperes, ¡la paciencia es clave para ganar!",
+    "💡 Consejo: Si dudas, cuenta las minas 💣 alrededor y usa la lógica.",
+    "💡 Consejo: Marca todas las minas 💣 que puedas identificar con banderas 🚩 para evitar errores.",
+    "💡 Consejo: No te apresures a destapar casillas; una acción rápida puede causar una explosión inesperada 💣.",
+    "💡 Consejo: Observa patrones en el tablero para deducir dónde están las minas 💣.",
+    "💡 Consejo: Usa las preguntas ❔ para marcar casillas dudosas y volver a ellas más tarde.",
+    "💡 Consejo: Recuerda que el primer clic nunca será una mina 💣, ¡aprovecha para abrir una zona segura!",
+    "💡 Consejo: Mantén la calma y analiza cada movimiento cuidadosamente para evitar errores.",
+    "💡 Consejo: Practica regularmente para mejorar tus habilidades y estrategias en el juego.",
+    "💡 Consejo: Si te sientes atascado, toma un descanso y vuelve con una mente fresca.",
+    "💡 Consejo: Asegúrate de ajustar la dificultad y el tamaño del tablero a tu nivel para disfrutar más del juego.",
+    "💡 Consejo: Aprende a identificar patrones comunes en el tablero para anticipar dónde están las minas 💣.",
+    "💡 Consejo: Las casillas con números indican exactamente cuántas minas 💣 tienen alrededor, no te dejes engañar por banderas 🚩 de más.",
+    "💡 Consejo: Si te encuentras en una situación difícil, intenta despejar áreas seguras primero para ganar confianza.",
+    "💡 Consejo: Si usa las marcas ❔ si te sientes atascado, más adelante puedes analizarlo",
+    "💡 Consejo: Si yo fueras una mina 💣 ¿dónde estarías?.",
+    "💡 Consejo: Recuerda que las minas 💣 no pueden estar en las casillas que ya has abierto.",
+    "💡 Consejo: A veces es mejor dejar una casilla sin abrir si no estás seguro, en lugar de arriesgarte a perder.",
+    "💡 Consejo: Cuando pierdas, piensa que las minas 💣 solo querían darte un abrazo explosivo 💥.",
+    "💡 Consejo: Un poco de suerte 🍀 y mucho café ☕ no están de más.",
+    "💡 Consejo: A veces hablar con los números es la mejor opción",
+    "💡 Consejo: A veces lo mejor es lanzar una moneda 🪙 al aire",
+    "💡 Consejo: Tomar un vaso de agua 🫗 puede alivianar el estrés",
+    "💡 Consejo: Recuerda tomar descansos de vez en cuando",
+    "💡 Consejo: Si dudas, pon una marca ❔. Mejor prevenir que explotar una mina 💣.",
+    "💡 Consejo: La lógica gana más que la suerte 🍀. ¡Piensa antes de hacer clic!",
+    "💡 Consejo: ¿Te quedan pocas opciones? ¡Confía en tu instinto y tu suerte 🍀!",
+    "💡 Consejo: Bandera 🚩 no es adorno, es estrategia.",
+    "💡 Consejo: ¿Demasiadas minas 💣 cerca? ¡Marca y despeja con cabeza!",
+    "💡 Consejo: En un 50/50, la moneda🪙 decide. ¡Solo que no siempre te quiere!",
+    "💡 Consejo: ¿Dos opciones y una mina 💣? ¡Moneda🪙 al aire y que gane el destino!",
+    "💡 Consejo: Suerte 🍀 no es estrategia, pero a veces es todo lo que tienes.",
+    "💡 Consejo: Si juegas las suficientes partidas eventualmente podrías ganar en un solo movimiento, pero no lo consideraría una opción",
+    "💡 Consejo: Si, podrías ganar haciendo click aleatoriamente y con una suerte 🍀 impresionante, pero no lo llames estrategia",
+    "💡 Consejo: Una pausa puede ser más poderosa que una bandera 🚩.",
+    "💡 Consejo: Revisa la hora 🕑 antes de gritar, la tienes en una esquina",
+    "💡 Consejo: Hay una leyenda de un número 8, ¿podrás encontrarlo?",
+    "💡 Consejo: Hacer click aleatoriamente también es una estrategia, ¿no?",
+    "💡 Consejo: FSM_TacoBell fue quien probó el funcionamiento del juego por horas en su fase temprana para dar criticas y desarrollar mejor el juego",
+    "💡 Consejo: Nadie ha ganado el juego en tamaño de tablero insano y dificultad insana, ¿quieres intentarlo?",
+];
 
 
 const boardSizes = {
@@ -49,10 +92,16 @@ function onBoardSizeChange() {
     }
 }
 
+function obtenerTip() {
+  const randomIndex = Math.floor(Math.random() * tips.length);
+  return tips[randomIndex];
+}
+
+
 function startGame() {
     let width, height;
     const size = document.getElementById('boardSize').value;
-
+    
     if (size === 'custom') {
     width = parseInt(document.getElementById('customWidth').value);
     height = parseInt(document.getElementById('customHeight').value);
@@ -83,7 +132,7 @@ function startGame() {
     
     resetTimer();
     document.getElementById('retryButton').style.display = 'none';
-
+    
 
     board = [];
 
@@ -163,6 +212,10 @@ function handleLeftClick(cell) {
     openCell(cell);
 
     if (cell.mine) {
+        const tipBar = document.getElementById('tipBar'); // Asegúrate que exista este elemento en el HTML
+        if (tipBar) {
+            tipBar.textContent = obtenerTip();
+        }
         cell.element.classList.add('mine-transform');
         cell.element.innerText = '💣';
         setTimeout(() => {
@@ -267,7 +320,7 @@ function endGame(won) {
                 }
             }
         }
-
+        
         document.getElementById('retryButton').style.display = 'inline-block';
         showRetryMessage();
 
@@ -482,3 +535,9 @@ function startGame() {
         }
     }
 }
+
+// Cerrar ventana modal al hacer clic en el botón
+document.getElementById('closeModalBtn').addEventListener('click', () => {
+    const modal = document.getElementById('welcomeModal');
+    modal.style.display = 'none';
+});

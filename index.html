@@ -61,7 +61,53 @@
   </div>
   <div id="totalTimer">⏱ Tiempo total jugado: <span id="totalTime">00:00:00</span></div>
   <div id="attemptCounter">🎮 Intentos realizados: <span id="attempts">0</span></div>
+
   <button id="retryButton" onclick="retryGame()" style="display:none; margin-top: 10px;">🔁 Volver a intentar</button>
+  <!-- Barra de consejos -->
+  <div id="tipBar" style="margin-top: 15px; font-style: italic; font-size: 16px; color: #bdb8b7;">
+    Consejo: Para colocar una bandera 🚩, haz clic derecho en una celda.
+  </div>
+
+  <!-- Ventana modal, oculta al principio -->
+  <div id="welcomeModal" class="modal" style="display: flex;">
+    <div class="modal-content">
+      <h2>🎮 ¡Bienvenido a Buscaminas!</h2>
+
+    <p>
+      Objetivo del juego: Revela todas las celdas sin minas 💣 para ganar. Si revelas una mina 💣, pierdes.
+    </p>
+    <p>
+      Reglas:
+    </p>
+    <ul style="text-align: left;">
+      <li>Al hacer click reveleará una celda</li>
+      <li>El primer click <strong>nunca</strong> es una mina 💣</li>
+      <li>Aparecerán unos números, este número indica la cantidad de minas 💣 que hay <strong>alrededor</strong></li>
+      <li>Las <strong>8 celdas</strong> que rodean cualquier casilla son consideredas <strong>alrededor</strong></li>
+      <li>Abrir una celda <strong>con mina 💣</strong> terminara el juego en derrota</li>
+      <li>Para ganar, debes abrir <strong>todas</strong> las celdas que <strong>no</strong> contienen minas 💣</li>
+      <li>Las banderas 🚩 y las marcas "?" no afectan el juego, son <strong>solo una guia</strong></li>
+      <li>Las celdas <strong>con</strong> una bandera 🚩 se bloquean y <strong>no</strong> pueden ser abiertas</li>
+      <li>Las celdas <strong>con</strong> marca "?" <strong>si</strong> pueden ser abiertas</li>
+      <li>Si revelas una celda con <strong>0 minas 💣 alrededor</strong>, se revelarán automáticamente las celdas adyacentes</li>
+      <li>Al inicio de la partida hay un contador de <strong>banderas 🚩 restantes</strong>, la partida <strong>inicia</strong> con una cantidad de <strong>banderas igual al total de minas 💣</strong></li>
+    </ul>
+    <p>
+      _____________________________________________________________________________
+    </p>
+    <p>
+      Aquí están los controles básicos:
+    </p>
+    <ul style="text-align: left;">
+      <li>🖱️ <strong>Clic Izquierdo</strong>: Revelar celda</li>
+      <li>🖱️ <strong>Clic Derecho</strong>: Colocar bandera 🚩</li>
+      <li>🖱️ <strong>Clic Derecho</strong>: Sobre una bandera 🚩 para colocar marca "?" </li>
+      <li>⏎ <strong>Enter</strong> o <strong>Espacio</strong>: Reintentar cuando pierdas</li>
+      <li>⚙️ Cambia el tamaño o dificultad desde el menú superior</li>
+    </ul>
+      <button id="closeModalBtn">¡Entendido!</button>
+    </div>
+  </div>
 
   <div id="board"></div>
 
@@ -70,7 +116,7 @@
   <footer style="margin-top: 20px; font-size: 14px; color: #888;">
     Created by Caasi04
     <br />
-    version 1.2.2
+    version 1.3.0
   </footer>
   <div id="clockOverlay"></div>
 </body>
