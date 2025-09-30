@@ -378,4 +378,195 @@ body.light-mode #themeToggle {
 }
 
 
+/* Contenedor general del botón configuración */
+.config-container {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1100;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
+/* Botón configuración */
+.config-container #config-button {
+  background-color: #323b49; /* un poco más oscuro que #3b4252 */
+  color: #dfe3e8;            /* un poco más claro que #eceff4 */
+  border: none;
+  padding: 10px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 12px;       /* más redondeado */
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.config-container #config-button:hover,
+.config-container #config-button:focus {
+  background-color: #4a5d88; /* más oscuro que #5e81ac */
+  outline: none;
+}
+
+/* Dropdown desplegable */
+.config-container #config-dropdown {
+  display: none; /* oculto por defecto */
+  flex-direction: column;
+  margin-top: 5px;
+  background-color: #323b49; /* igual que el botón */
+  border-radius: 12px;       /* más redondeado */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.75); /* sombra un poco más intensa */
+  min-width: 180px;
+  padding: 5px 0;
+  user-select: none;
+  position: absolute;
+  left: 0;
+  z-index: 1150;
+}
+
+/* Botones dentro del dropdown */
+.config-container #config-dropdown button {
+  background-color: transparent;
+  border: none;
+  color: #dfe3e8;            /* un poco más claro */
+  padding: 10px 20px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  width: 90%;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  border-radius: 10px;       /* esquinas redondeadas */
+  margin: 2px 10px;          /* un poco de margen para que no estén tan pegados */
+}
+
+.config-container #config-dropdown button:hover,
+.config-container #config-dropdown button:focus {
+  background-color: #4a5d88;
+  outline: none;
+}
+
+/* Modal para notas de parche */
+#patch-notes-modal {
+  display: none; /* oculto por defecto */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(35, 40, 50, 0.9); /* un poco más oscuro que antes */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1200;
+  user-select: none;
+}
+
+#patch-notes-modal .modal-content {
+  background-color: #323b49;
+  color: #dfe3e8;
+  padding: 25px 30px;
+  border-radius: 15px;       /* más redondeado */
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 0 25px rgba(30, 60, 110, 0.9); /* sombra más marcada, azulada */
+  text-align: left;
+  font-size: 16px;
+  font-weight: 500;
+  user-select: text;
+}
+
+#patch-notes-modal h2 {
+  color: #7da2c9;             /* un azul más oscuro */
+  font-weight: 700;
+  font-size: 1.8em;
+  margin-bottom: 15px;
+}
+
+#patch-notes-modal p, 
+#patch-notes-modal ul {
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  line-height: 1.4;
+}
+
+#patch-notes-modal ul {
+  padding-left: 20px;
+}
+
+#patch-notes-modal #close-patch-notes-btn {
+  display: block;
+  margin: 20px auto 0 auto;
+  padding: 12px 30px;
+  background-color: #4a5d88;
+  border: none;
+  border-radius: 12px;
+  color: #dfe3e8;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: fit-content;
+}
+
+#patch-notes-modal #close-patch-notes-btn:hover,
+#patch-notes-modal #close-patch-notes-btn:focus {
+  background-color: #5c72b1;
+  outline: none;
+}
+
+/* Modo claro */
+body.light-mode .config-container #config-button {
+  background-color: #bfc7d3; /* más oscuro que #d8dee9 */
+  color: #2e3440;
+}
+
+body.light-mode .config-container #config-button:hover,
+body.light-mode .config-container #config-button:focus {
+  background-color: #6b84a7; /* más oscuro que #81a1c1 */
+  color: #2e3440;
+}
+
+body.light-mode .config-container #config-dropdown {
+  background-color: #bfc7d3;
+  color: #2e3440;
+  box-shadow: 0 4px 12px rgba(80, 80, 80, 0.3);
+  border-radius: 12px;
+}
+
+body.light-mode .config-container #config-dropdown button {
+  color: #2e3440;
+  border-radius: 10px;
+  margin: 2px 10px;
+}
+
+body.light-mode .config-container #config-dropdown button:hover,
+body.light-mode .config-container #config-dropdown button:focus {
+  background-color: #6b84a7;
+  color: #2e3440;
+}
+
+body.light-mode #patch-notes-modal {
+  background-color: rgba(200, 210, 220, 0.95);
+}
+
+body.light-mode #patch-notes-modal .modal-content {
+  background-color: #dbe1ea;
+  color: #2e3440;
+  box-shadow: 0 0 25px rgba(80, 80, 80, 0.4);
+  border-radius: 15px;
+}
+
+body.light-mode #patch-notes-modal #close-patch-notes-btn {
+  background-color: #6b84a7;
+  color: #2e3440;
+  border-radius: 12px;
+}
+
+body.light-mode #patch-notes-modal #close-patch-notes-btn:hover,
+body.light-mode #patch-notes-modal #close-patch-notes-btn:focus {
+  background-color: #5a6f97;
+  color: #2e3440;
+}
+
+/* Transiciones suaves para cambio de modo */
+* {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}

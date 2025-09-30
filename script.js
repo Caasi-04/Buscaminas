@@ -551,3 +551,92 @@ themeToggle.addEventListener("click", () => {
     isLight = !isLight;
     themeToggle.textContent = isLight ? "☀️" : "🌙";
 });
+
+// Referencias a elementos
+const configButton = document.getElementById('config-button');
+const configDropdown = document.getElementById('config-dropdown');
+const patchNotesButton = document.getElementById('patch-notes-button');
+const patchNotesModal = document.getElementById('patch-notes-modal');
+const closePatchNotesBtn = document.getElementById('close-patch-notes-btn');
+
+// Función para ocultar dropdown
+function hideDropdown() {
+  configDropdown.style.display = 'none';
+  configButton.setAttribute('aria-expanded', 'false');
+}
+
+// Función para mostrar dropdown
+function showDropdown() {
+  configDropdown.style.display = 'flex';
+  configButton.setAttribute('aria-expanded', 'true');
+}
+
+// Alternar dropdown
+function toggleDropdown() {
+  if (configDropdown.style.display === 'flex') {
+    hideDropdown();
+  } else {
+    showDropdown();
+  }
+}
+
+// Abrir modal de notas de parche
+function openPatchNotes() {
+  patchNotesModal.style.display = 'flex';
+  hideDropdown();
+  patchNotesModal.focus();
+}
+
+// Cerrar modal de notas de parche
+function closePatchNotes() {
+  patchNotesModal.style.display = 'none';
+  configButton.focus();
+}
+
+// Event listeners
+
+// Al hacer click en botón Configuraciones
+configButton.addEventListener('click', (e) => {
+  e.stopPropagation(); // Para que no cierre al hacer click en el mismo botón
+  toggleDropdown();
+});
+
+// Al hacer click en botón Notas de parche
+patchNotesButton.addEventListener('click', (e) => {
+  e.stopPropagation();
+  openPatchNotes();
+});
+
+// Al hacer click en botón Cerrar modal
+closePatchNotesBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  closePatchNotes();
+});
+
+// Cerrar dropdown o modal si se hace click fuera
+document.addEventListener('click', (e) => {
+  const target = e.target;
+  
+  // Si el modal está abierto y el click es fuera del modal-content, cerrar modal
+  if (patchNotesModal.style.display === 'flex' && !patchNotesModal.contains(target)) {
+    closePatchNotes();
+  }
+  
+  // Si el dropdown está abierto y el click es fuera del dropdown y del botón, cerrar dropdown
+  if (configDropdown.style.display === 'flex' && 
+      target !== configButton && 
+      !configDropdown.contains(target)) {
+    hideDropdown();
+  }
+});
+
+// Opcional: cerrar modal con tecla Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (patchNotesModal.style.display === 'flex') {
+      closePatchNotes();
+    } else if (configDropdown.style.display === 'flex') {
+      hideDropdown();
+    }
+  }
+});
