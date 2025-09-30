@@ -12,6 +12,7 @@ let totalPlayTime = 0;        // en milisegundos
 let totalTimerInterval = null;
 let currentSessionStart = null;
 
+
 const tips = [
     "💡 Consejo: Recuerda marcar las minas 💣 con banderas 🚩 para no explotarlas accidentalmente.",
     "💡 Consejo: No te desesperes, ¡la paciencia es clave para ganar!",
@@ -72,7 +73,7 @@ const difficultyRatios = {
     normal: 0.17,
     hard: 0.28,
     extreme: 0.38,
-    insane: 0.54,
+    insane: 0.45,
 };
 
 function onBoardSizeChange() {
@@ -540,4 +541,13 @@ function startGame() {
 document.getElementById('closeModalBtn').addEventListener('click', () => {
     const modal = document.getElementById('welcomeModal');
     modal.style.display = 'none';
+});
+
+const themeToggle = document.getElementById("themeToggle");
+let isLight = false;
+
+themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("light-mode");
+    isLight = !isLight;
+    themeToggle.textContent = isLight ? "☀️" : "🌙";
 });

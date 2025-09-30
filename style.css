@@ -297,3 +297,85 @@ h1 {
     align-items: center;
     z-index: 10000;
 }
+
+#themeToggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4c566a;
+    color: #eceff4;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: background-color 0.3s, transform 0.3s;
+    z-index: 10000;
+}
+
+#themeToggle:hover {
+    background-color: #5e81ac;
+    transform: rotate(20deg) scale(1.1);
+}
+
+body.light-mode {
+    background-color: #cecece;
+    color: #2e3440;
+}
+
+body.light-mode #config select,
+body.light-mode #config input {
+    background: #d8dee9;
+    color: #2e3440;
+    border: 1px solid #a0aec0;
+}
+
+body.light-mode .cell {
+    background-color: #c2c1c1;
+    color: #2e3440;
+    border-color: #a0aec0;
+}
+
+body.light-mode .cell.open {
+    background-color: #e5e7eb;   
+}
+
+body.light-mode .cell.flag {
+    background-color: #bf616a;
+    color: white;
+}
+
+body.light-mode .cell.question {
+    background-color: #ebcb8b;
+    color: #2e3440;
+}
+
+body.light-mode #tipBar {
+    background-color: #646464;
+    color: #2e3440;
+}
+
+body.light-mode #gameStatusBar,
+body.light-mode #clockOverlay {
+    background-color: #cecece;
+    color: #2e3440;
+}
+
+body.light-mode .modal-content {
+    background-color: #e5e9f0;
+    color: #2e3440;
+}
+
+body.light-mode #themeToggle {
+    background-color: #d8dee9;
+    color: #2e3440;
+}
+
+* {
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+
+
