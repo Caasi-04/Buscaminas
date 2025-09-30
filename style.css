@@ -274,7 +274,7 @@ h1 {
 .modal-content {
     background-color: #3b4252; /* Color oscuro para que combine con tu tema */
     color: #eceff4;
-    width: 550px; /* Más ancha */
+    width: 600px; /* Más ancha */
     max-width: 90vw; /* Que no se pase del ancho de pantalla */
     padding: 25px 30px;
     border-radius: 12px;
