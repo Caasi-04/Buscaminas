@@ -70,7 +70,7 @@ const difficultyRatios = {
     Veasy: 0.05,
     easy: 0.10,
     normal: 0.17,
-    hard: 0.30,
+    hard: 0.28,
     extreme: 0.38,
     insane: 0.54,
 };
@@ -274,7 +274,7 @@ function handleRightClick(cell) {
     } else if (cell.flagged) {
     cell.flagged = false;
     cell.question = true;
-    cell.element.innerText = '?';
+    cell.element.innerText = '  ?';
     cell.element.classList.remove('flag');
     cell.element.classList.add('question');
     flagsLeft++;
