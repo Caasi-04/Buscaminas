@@ -104,15 +104,15 @@ function startGame() {
     const size = document.getElementById('boardSize').value;
     
     if (size === 'custom') {
-    width = parseInt(document.getElementById('customWidth').value);
-    height = parseInt(document.getElementById('customHeight').value);
-    mineCount = parseInt(document.getElementById('customMines').value);
+        width = parseInt(document.getElementById('customWidth').value);
+        height = parseInt(document.getElementById('customHeight').value);
+        mineCount = parseInt(document.getElementById('customMines').value);
     } else {
-    width = boardSizes[size];
-    height = Math.ceil(width * 0.8);
-    const difficulty = document.getElementById('difficulty').value;
-    const ratio = difficultyRatios[difficulty];
-    mineCount = Math.round(width * height * ratio);
+        width = boardSizes[size];
+        height = Math.ceil(width * 0.8);
+        const difficulty = document.getElementById('difficulty').value;
+        const ratio = difficultyRatios[difficulty];
+        mineCount = Math.round(width * height * ratio);
     }
 
     if (mineCount >= width * height) mineCount = width * height - 1;
@@ -127,42 +127,64 @@ function startGame() {
 
     const boardEl = document.getElementById('board');
     boardEl.innerHTML = '';
-    boardEl.style.gridTemplateColumns = `repeat(${width}, 30px)`;
-    boardEl.style.gridTemplateRows = `repeat(${height}, 30px)`;
 
-    
+    // 🔹 tamaño dinámico de celda (máx 30px, ajustado al ancho de pantalla)
+    const cellSize = Math.min(30, Math.floor(window.innerWidth / width * 0.9));
+    boardEl.style.gridTemplateColumns = `repeat(${width}, ${cellSize}px)`;
+    boardEl.style.gridTemplateRows = `repeat(${height}, ${cellSize}px)`;
+
     resetTimer();
     document.getElementById('retryButton').style.display = 'none';
-    
 
     board = [];
 
     for (let r = 0; r < height; r++) {
-    board[r] = [];
-    for (let c = 0; c < width; c++) {
-        const cell = {
-        row: r,
-        col: c,
-        mine: false,
-        opened: false,
-        flagged: false,
-        question: false,
-        element: document.createElement('div'),
-        adjacent: 0
-        };
+        board[r] = [];
+        for (let c = 0; c < width; c++) {
+            const cell = {
+                row: r,
+                col: c,
+                mine: false,
+                opened: false,
+                flagged: false,
+                question: false,
+                element: document.createElement('div'),
+                adjacent: 0
+            };
 
-        cell.element.classList.add('cell');
-        cell.element.addEventListener('click', () => handleLeftClick(cell));
-        cell.element.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        handleRightClick(cell);
-        });
+            cell.element.classList.add('cell');
 
-        boardEl.appendChild(cell.element);
-        board[r][c] = cell;
-    }
+            // 🖱️ PC: click izquierdo
+            cell.element.addEventListener('click', () => handleLeftClick(cell));
+
+            // 🖱️ PC: click derecho
+            cell.element.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                handleRightClick(cell);
+            });
+
+            // 📱 Móvil: toque corto = abrir, toque largo = bandera
+            let pressTimer;
+            cell.element.addEventListener("touchstart", () => {
+                pressTimer = setTimeout(() => {
+                    handleRightClick(cell); // 🚩
+                    pressTimer = null;
+                }, 200); // 0.2s presión
+            });
+
+            cell.element.addEventListener("touchend", () => {
+                if (pressTimer) {
+                    clearTimeout(pressTimer);
+                    handleLeftClick(cell); // abrir
+                }
+            });
+
+            boardEl.appendChild(cell.element);
+            board[r][c] = cell;
+        }
     }
 }
+
 
 function placeMines(excludeRow, excludeCol) {
     let placed = 0;
@@ -640,3 +662,46 @@ document.addEventListener('keydown', (e) => {
     }
   }
 });
+
+if (!("ontouchstart" in window)) {
+    document.addEventListener("keydown", (event) => {
+        // aquí tu lógica de teclado
+    });
+}
+
+let scale = 1;
+const boardEl = document.getElementById("board");
+const container = document.getElementById("board-container");
+
+let initialDistance = null;
+let initialScale = 1;
+
+container.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 2) {
+    e.preventDefault();
+    initialDistance = getDistance(e.touches[0], e.touches[1]);
+    initialScale = scale;
+  }
+}, { passive: false });
+
+container.addEventListener("touchmove", (e) => {
+  if (e.touches.length === 2 && initialDistance) {
+    e.preventDefault();
+    const currentDistance = getDistance(e.touches[0], e.touches[1]);
+    scale = initialScale * (currentDistance / initialDistance);
+    scale = Math.max(0.5, Math.min(scale, 3)); // límite entre 50% y 300%
+    boardEl.style.transform = `scale(${scale})`;
+  }
+}, { passive: false });
+
+container.addEventListener("touchend", (e) => {
+  if (e.touches.length < 2) {
+    initialDistance = null;
+  }
+});
+
+function getDistance(touch1, touch2) {
+  const dx = touch2.clientX - touch1.clientX;
+  const dy = touch2.clientY - touch1.clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}

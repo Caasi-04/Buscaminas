@@ -1,3 +1,4 @@
+/* ======= ESTILOS GENERALES ======= */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #2e3440;
@@ -45,16 +46,31 @@ h1 {
     background-color: #81a1c1;
 }
 
-#board {
-    display: grid;
-    justify-content: center;
-    margin-top: 20px;
-    user-select: none;
+/* ======= TABLERO ======= */
+#board-container {
+  width: 100%;
+  height: calc(100vh - 150px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  display: block;          /* 🔹 no usar flex */
+  text-align: center;      /* 🔹 centro horizontal */
 }
 
+#board {
+  display: inline-grid;    /* 🔹 inline para que respete el centrado */
+  margin: auto;            /* 🔹 se centra cuando sobra espacio */
+  user-select: none;
+  transform-origin: top left;
+  min-width: max-content;
+  min-height: max-content;
+}
+
+
+
+/* ======= CELDAS ======= */
 .cell {
-    width: 30px;
-    height: 30px;
+    width: min(30px, 8vw);
+    height: min(30px, 8vw);
     border: 1px solid #4c566a;
     display: flex;
     align-items: center;
@@ -99,6 +115,7 @@ h1 {
 .cell.open[data-adjacent="7"] { color: #81a1c1; }
 .cell.open[data-adjacent="8"] { color: #8fbcbb; }
 
+/* ======= ESTADOS Y ANIMACIONES ======= */
 #flagCounter {
     font-size: 20px;
     margin-top: 10px;
@@ -110,20 +127,9 @@ h1 {
 }
 
 @keyframes bloom {
-    0% {
-    transform: scale(0.3) rotate(0deg);
-    opacity: 0.2;
-    color: #e5e9f0;
-    }
-    50% {
-    transform: scale(1.3) rotate(180deg);
-    opacity: 1;
-    color: #a3be8c;
-    }
-    100% {
-    transform: scale(1) rotate(360deg);
-    color: #ebcb8b;
-    }
+    0% { transform: scale(0.3) rotate(0deg); opacity: 0.2; color: #e5e9f0; }
+    50% { transform: scale(1.3) rotate(180deg); opacity: 1; color: #a3be8c; }
+    100% { transform: scale(1) rotate(360deg); color: #ebcb8b; }
 }
 
 .mine-transform {
@@ -165,6 +171,8 @@ h1 {
     font-size: 18px;
     margin-top: 5px;
 }
+
+/* ======= BARRAS E INTERFAZ ======= */
 #clockOverlay {
     position: fixed;
     top: 10px;
@@ -194,7 +202,6 @@ h1 {
     font-size: 20px;
 }
 
-/* --- Barra de consejos --- */
 #tipBar {
     background-color: #4c566a;
     color: #d8dee9;
@@ -209,95 +216,57 @@ h1 {
     box-shadow: 0 0 8px rgba(76, 86, 106, 0.7);
 }
 
-/* --- Ventana modal --- */
+/* ======= MODAL ======= */
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(46, 52, 64, 0.95);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(46, 52, 64, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 10000;
+  overflow-y: auto;
+  padding: 20px; /* 🔹 espacio alrededor de la ventana */
+  box-sizing: border-box; /* 🔹 evita que el padding "rompa" el tamaño */
+
+  /* Ocultar scrollbar en la capa oscura si aparece */
+  -ms-overflow-style: none;  
+  scrollbar-width: none;
+}
+.modal::-webkit-scrollbar {
+  display: none;
 }
 
 .modal-content {
-    background-color: #3b4252;
-    padding: 25px 30px;
-    border-radius: 10px;
-    max-width: 400px;
-    width: 90%;
-    color: #eceff4;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(101, 123, 131, 0.8);
-}
+  background-color: #3b4252;
+  color: #eceff4;
+  width: 600px;
+  max-width: 90vw;  /* 🔹 deja espacio a los lados */
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+  margin: 20px auto; /* 🔹 centra y separa arriba/abajo */
+  text-align: left;
+  font-size: 16px;
+  font-weight: 500;
+  max-height: 90vh;
+  overflow-y: auto;
 
-.modal-content h2 {
-    margin-bottom: 15px;
-    font-size: 1.8em;
-    font-weight: 700;
-    color: #88c0d0;
+  /* Ocultar scrollbar dentro de la caja */
+  -ms-overflow-style: none;  
+  scrollbar-width: none;
 }
-
-.modal-content p, 
-.modal-content ul {
-    text-align: left;
-    margin-bottom: 10px;
-    font-size: 1.1em;
-}
-
-.modal-content ul {
-    padding-left: 20px;
-}
-
-#closeModalBtn {
-    display: block;
-    margin: 20px auto 0 auto; /* Centra horizontalmente y espacio arriba */
-    padding: 15px 30px;
-    background-color: #5e81ac;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: fit-content; /* Ajusta ancho al contenido */
-}
-
-#closeModalBtn:hover {
-    background-color: #81a1c1;
+.modal-content::-webkit-scrollbar {
+  display: none;
 }
 
 
-.modal-content {
-    background-color: #3b4252; /* Color oscuro para que combine con tu tema */
-    color: #eceff4;
-    width: 600px; /* Más ancha */
-    max-width: 90vw; /* Que no se pase del ancho de pantalla */
-    padding: 25px 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-    margin: auto;
-    text-align: left; /* Que el texto se alinee a la izquierda */
-    font-size: 16px;
-    font-weight: 500;
-}
 
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(46, 52, 64, 0.85); /* Fondo semitransparente */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-}
 
+/* ======= BOTÓN DE TEMA ======= */
 #themeToggle {
     position: fixed;
     bottom: 20px;
@@ -320,65 +289,136 @@ h1 {
     transform: rotate(20deg) scale(1.1);
 }
 
+/* ======= MODO CLARO ======= */
 body.light-mode {
-    background-color: #cecece;
+    background-color: #f4f4f4;
     color: #2e3440;
 }
 
-body.light-mode #config select,
-body.light-mode #config input {
-    background: #d8dee9;
+/* ======= CELDAS ======= */
+body.light-mode .cell {
+    background-color: #c2c1c1;
     color: #2e3440;
     border: 1px solid #a0aec0;
 }
 
-body.light-mode .cell {
-    background-color: #c2c1c1;
-    color: #2e3440;
-    border-color: #a0aec0;
-}
-
 body.light-mode .cell.open {
-    background-color: #e5e7eb;   
+    background-color: #e5e7eb;
 }
 
-body.light-mode .cell.flag {
-    background-color: #bf616a;
+/* ======= CONFIGURACIÓN ======= */
+body.light-mode .config-container #config-button {
+    background-color: #aaaaaa; /* Color del boton con engranaje */
+    color: #2e3440;
+    border: 1px solid #a0aec0;
+}
+
+body.light-mode .config-container #config-button:hover {
+    background-color: #d1d5db;
+}
+
+
+/* ======= DROPDOWN ======= */
+body.light-mode #config-dropdown {
+    background-color: #f3f4f6; 
+    color: #2e3440;
+    border: 1px solid #cbd5e0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+body.light-mode #config-dropdown button {
+    background: transparent;
+    color: #2e3440;
+    border: none;
+}
+
+body.light-mode #config-dropdown button:hover {
+    background-color: #e5e7eb;
+}
+
+/* ======= INPUTS Y SELECTS ======= */
+body.light-mode #config select,
+body.light-mode #config input {
+    background: #e5e7eb;
+    color: #2e3440;
+    border: 1px solid #a0aec0;
+}
+
+/* ======= BOTONES ======= */
+body.light-mode #config button {
+    background-color: #4c8ed9;
     color: white;
 }
 
-body.light-mode .cell.question {
-    background-color: #ebcb8b;
+body.light-mode #config button:hover {
+    background-color: #6da9e8;
+}
+
+/* ======= BARRAS Y OVERLAYS ======= */
+body.light-mode #gameStatusBar {
+    background-color: rgba(220, 220, 220, 0.95);
+    border-bottom: 1px solid #cbd5e0;
     color: #2e3440;
 }
 
 body.light-mode #tipBar {
-    background-color: #646464;
+    background-color: #dcdcdc;
     color: #2e3440;
 }
 
-body.light-mode #gameStatusBar,
 body.light-mode #clockOverlay {
-    background-color: #cecece;
+    background-color: rgba(230, 230, 230, 0.9);
     color: #2e3440;
 }
 
+/* ======= MODALES ======= */
 body.light-mode .modal-content {
-    background-color: #e5e9f0;
+    background-color: #ffffff;
     color: #2e3440;
 }
 
+/* ======= TOGGLE DE TEMA ======= */
 body.light-mode #themeToggle {
-    background-color: #d8dee9;
+    background-color: #dcdcdc;
     color: #2e3440;
 }
 
-* {
-    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+body.light-mode #themeToggle:hover {
+    background-color: #a0aec0;
+}
+
+/* ======= CONTENEDORES GENERALES ======= */
+body.light-mode .config-container {
+    background-color: transparent; /* o gris muy claro */
+}
+
+body.light-mode #patch-notes-modal {
+    background-color: rgba(197, 197, 197, 0.6); /* 0.6 = 60% opaco, 40% transparente */
 }
 
 
-/* Contenedor general del botón configuración */
+/* ======= PATCH NOTES MODAL ======= */
+body.light-mode #patch-notes-modal .modal-content {
+    background-color: #ffffff;
+    color: #2e3440;
+}
+
+body.light-mode #patch-notes-modal h2,
+body.light-mode #patch-notes-modal p {
+    color: #2e3440; /* título y párrafos en oscuro */
+}
+
+body.light-mode #patch-notes-modal #close-patch-notes-btn {
+    background-color: #4c8ed9;
+    color: white;
+}
+
+body.light-mode #patch-notes-modal #close-patch-notes-btn:hover {
+    background-color: #6da9e8;
+}
+
+
+/* ======= CONFIG MENÚ ======= */
 .config-container {
   position: fixed;
   top: 10px;
@@ -387,33 +427,31 @@ body.light-mode #themeToggle {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Botón configuración */
 .config-container #config-button {
-  background-color: #323b49; /* un poco más oscuro que #3b4252 */
-  color: #dfe3e8;            /* un poco más claro que #eceff4 */
+  background-color: #323b49;
+  color: #dfe3e8;
   border: none;
   padding: 10px 16px;
   font-size: 16px;
   cursor: pointer;
-  border-radius: 12px;       /* más redondeado */
+  border-radius: 12px;
   user-select: none;
   transition: background-color 0.3s ease;
 }
 
 .config-container #config-button:hover,
 .config-container #config-button:focus {
-  background-color: #4a5d88; /* más oscuro que #5e81ac */
+  background-color: #4a5d88;
   outline: none;
 }
 
-/* Dropdown desplegable */
 .config-container #config-dropdown {
-  display: none; /* oculto por defecto */
+  display: none;
   flex-direction: column;
   margin-top: 5px;
-  background-color: #323b49; /* igual que el botón */
-  border-radius: 12px;       /* más redondeado */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.75); /* sombra un poco más intensa */
+  background-color: #323b49;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.75);
   min-width: 180px;
   padding: 5px 0;
   user-select: none;
@@ -422,20 +460,20 @@ body.light-mode #themeToggle {
   z-index: 1150;
 }
 
-/* Botones dentro del dropdown */
 .config-container #config-dropdown button {
-  background-color: transparent;
-  border: none;
-  color: #dfe3e8;            /* un poco más claro */
-  padding: 10px 20px;
-  text-align: left;
-  cursor: pointer;
-  font-size: 14px;
-  width: 90%;
-  transition: background-color 0.3s ease;
-  user-select: none;
-  border-radius: 10px;       /* esquinas redondeadas */
-  margin: 2px 10px;          /* un poco de margen para que no estén tan pegados */
+    background-color: transparent;
+    border: none;
+    color: #dfe3e8;
+    padding: 12px 24px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    width: auto;
+    min-width: 180px;
+    line-height: 1.4;
+    border-radius: 10px;
+    margin: 5px 10px;
+    white-space: normal;
 }
 
 .config-container #config-dropdown button:hover,
@@ -444,15 +482,15 @@ body.light-mode #themeToggle {
   outline: none;
 }
 
-/* Modal para notas de parche */
+/* ======= PATCH NOTES MODAL ======= */
 #patch-notes-modal {
-  display: none; /* oculto por defecto */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(35, 40, 50, 0.9); /* un poco más oscuro que antes */
+  background-color: rgba(35, 40, 50, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -464,10 +502,10 @@ body.light-mode #themeToggle {
   background-color: #323b49;
   color: #dfe3e8;
   padding: 25px 30px;
-  border-radius: 15px;       /* más redondeado */
+  border-radius: 15px;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 0 25px rgba(30, 60, 110, 0.9); /* sombra más marcada, azulada */
+  box-shadow: 0 0 25px rgba(30, 60, 110, 0.9);
   text-align: left;
   font-size: 16px;
   font-weight: 500;
@@ -475,21 +513,28 @@ body.light-mode #themeToggle {
 }
 
 #patch-notes-modal h2 {
-  color: #7da2c9;             /* un azul más oscuro */
+  color: #7da2c9;
   font-weight: 700;
   font-size: 1.8em;
   margin-bottom: 15px;
 }
 
-#patch-notes-modal p, 
-#patch-notes-modal ul {
-  margin-bottom: 10px;
-  font-size: 1.1em;
-  line-height: 1.4;
+#closeModalBtn {
+    display: block;
+    margin: 20px auto 0 auto; /* Centra horizontalmente y espacio arriba */
+    padding: 15px 30px;
+    background-color: #5e81ac;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: fit-content; /* Ajusta ancho al contenido */
 }
 
-#patch-notes-modal ul {
-  padding-left: 20px;
+#closeModalBtn:hover {
+    background-color: #81a1c1;
 }
 
 #patch-notes-modal #close-patch-notes-btn {
@@ -506,67 +551,71 @@ body.light-mode #themeToggle {
   width: fit-content;
 }
 
-#patch-notes-modal #close-patch-notes-btn:hover,
-#patch-notes-modal #close-patch-notes-btn:focus {
+#patch-notes-modal #close-patch-notes-btn:hover {
   background-color: #5c72b1;
-  outline: none;
 }
 
-/* Modo claro */
-body.light-mode .config-container #config-button {
-  background-color: #bfc7d3; /* más oscuro que #d8dee9 */
-  color: #2e3440;
-}
+/* ======= RESPONSIVE ======= */
+@media (max-width: 600px) {
+  body { padding: 10px; font-size: 14px; }
+  h1 { font-size: 1.5em; margin-bottom: 8px; }
 
-body.light-mode .config-container #config-button:hover,
-body.light-mode .config-container #config-button:focus {
-  background-color: #6b84a7; /* más oscuro que #81a1c1 */
-  color: #2e3440;
-}
+  #config {
+    font-size: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
 
-body.light-mode .config-container #config-dropdown {
-  background-color: #bfc7d3;
-  color: #2e3440;
-  box-shadow: 0 4px 12px rgba(80, 80, 80, 0.3);
-  border-radius: 12px;
-}
+  #config label, 
+  #config select, 
+  #config input,
+  #config button {
+    margin: 5px 5px 5px 0;
+    min-width: 100px;
+    font-size: 14px;
+  }
 
-body.light-mode .config-container #config-dropdown button {
-  color: #2e3440;
-  border-radius: 10px;
-  margin: 2px 10px;
-}
+  #board-container {
+  width: 100%;
+  height: calc(100vh - 150px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pinch-zoom pan-x pan-y;
+  overscroll-behavior: contain;
+  display: flex;
+  justify-content: center;
+  align-items: start;
 
-body.light-mode .config-container #config-dropdown button:hover,
-body.light-mode .config-container #config-dropdown button:focus {
-  background-color: #6b84a7;
-  color: #2e3440;
+  /* Ocultar scrollbar */
+  -ms-overflow-style: none;  /* IE y Edge */
+  scrollbar-width: none;     /* Firefox */
 }
-
-body.light-mode #patch-notes-modal {
-  background-color: rgba(200, 210, 220, 0.95);
+#board-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
+  #board {
+    grid-template-columns: repeat(auto-fill, minmax(25px, 1fr));
+    justify-content: start !important;
+    margin-top: 15px;
+  }
 
-body.light-mode #patch-notes-modal .modal-content {
-  background-color: #dbe1ea;
-  color: #2e3440;
-  box-shadow: 0 0 25px rgba(80, 80, 80, 0.4);
-  border-radius: 15px;
-}
+  .cell {
+    width: 25px;
+    height: 25px;
+    font-size: 14px;
+  }
 
-body.light-mode #patch-notes-modal #close-patch-notes-btn {
-  background-color: #6b84a7;
-  color: #2e3440;
-  border-radius: 12px;
-}
+  #flagCounter, #timer, #attemptCounter { font-size: 16px; }
+  #gameStatusBar { font-size: 16px; gap: 20px; padding: 6px 8px; }
+  #clockOverlay { font-size: 12px; padding: 6px 8px; top: 5px; right: 8px; }
 
-body.light-mode #patch-notes-modal #close-patch-notes-btn:hover,
-body.light-mode #patch-notes-modal #close-patch-notes-btn:focus {
-  background-color: #5a6f97;
-  color: #2e3440;
-}
-
-/* Transiciones suaves para cambio de modo */
-* {
-  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  .modal-content { width: 90%; padding: 20px 15px; font-size: 14px; }
+  .config-container { top: 5px; left: 5px; }
+  .config-container #config-button { padding: 8px 12px; font-size: 14px; }
+  .config-container #config-dropdown { min-width: 140px; padding: 4px 0; }
+  .config-container #config-dropdown button { font-size: 13px; padding: 8px 16px; margin: 2px 5px; }
+  #themeToggle { width: 40px; height: 40px; font-size: 20px; bottom: 15px; right: 15px; }
+  #patch-notes-modal .modal-content { width: 100%; padding: 20px 15px; font-size: 14px; }
 }
