@@ -6,6 +6,10 @@ body {
     text-align: center;
     padding: 20px;
 }
+/* Aplicar transición suave a todo el body y elementos importantes en cambio de tema */
+body, body * {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
 
 h1 {
     font-size: 2.2em;
@@ -20,6 +24,53 @@ h1 {
 #config label {
     margin: 5px 10px;
 }
+
+/* Contenedor del modal */
+#welcomeModal {
+  display: flex; /* inicialmente visible, cambia a none al cerrar */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(35, 40, 50, 0.9);
+  justify-content: center;
+  align-items: center;
+  z-index: 1200;
+  overflow-y: auto;   /* scroll vertical */
+  overflow-x: hidden; /* NO scroll horizontal */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Contenido del modal */
+#welcomeModal .modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  background-color: #2e3440;
+  padding: 20px;
+  border-radius: 12px;
+  overflow-y: auto;   /* scroll vertical si el contenido es alto */
+  overflow-x: hidden; /* bloquear scroll horizontal */
+  box-sizing: border-box;
+}
+
+/* Botón flotante de cerrar */
+#welcomeModal #closeModalBtn {
+  position: fixed;
+  bottom: 20px;       /* distancia desde el borde inferior */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1300;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #434c5e;
+  color: #eceff4;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 
 #config select, #config input {
     padding: 5px;
@@ -50,20 +101,21 @@ h1 {
 #board-container {
   width: 100%;
   height: calc(100vh - 150px);
-  overflow: auto;
+  overflow: auto;              /* permite scroll en móviles */
   -webkit-overflow-scrolling: touch;
-  display: block;          /* 🔹 no usar flex */
-  text-align: center;      /* 🔹 centro horizontal */
+  display: block;              /* no usar flex */
+  text-align: center;          /* centra horizontalmente el board */
 }
 
 #board {
-  display: inline-grid;    /* 🔹 inline para que respete el centrado */
-  margin: auto;            /* 🔹 se centra cuando sobra espacio */
+  display: grid;
+  width: fit-content;          /* solo ocupa el espacio de las celdas */
+  height: fit-content;
+  margin: auto;                /* centra si cabe en el contenedor */
   user-select: none;
   transform-origin: top left;
-  min-width: max-content;
-  min-height: max-content;
 }
+
 
 
 
@@ -194,13 +246,25 @@ h1 {
     top: 0;
     z-index: 999;
     background-color: rgba(46, 52, 64, 0.95);
-    padding: 8px 12px;
+    padding: 8px 12px;  /* 🔹 mínimo padding vertical */
     border-bottom: 1px solid #4c566a;
     display: flex;
-    justify-content: center;
-    gap: 40px;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
     font-size: 20px;
+    line-height: 1;
 }
+
+#gameStatusBar > div {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+
+
+
 
 #tipBar {
     background-color: #4c566a;
@@ -264,6 +328,38 @@ h1 {
 }
 
 
+.config-modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 600px;
+  background-color: #2e3440;
+  padding: 20px;
+  border-radius: 12px;
+  color: #eceff4;
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.patch-notes-content {
+  overflow-y: auto;
+  flex: 1; /* ocupa todo el espacio disponible */
+  margin-bottom: 50px; /* deja espacio para el botón flotante */
+}
+
+.config-close-btn {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  background-color: #434c5e;
+  border: none;
+  border-radius: 8px;
+  color: #eceff4;
+  cursor: pointer;
+  z-index: 10;
+}
 
 
 /* ======= BOTÓN DE TEMA ======= */
@@ -294,7 +390,14 @@ body.light-mode {
     background-color: #f4f4f4;
     color: #2e3440;
 }
+body.light-mode #patch-notes-modal {
+  background-color: #fff;
+  color: #2e3440;
+}
 
+body.light-mode #patch-notes-title {
+  color: #2e3440 !important;
+}
 /* ======= CELDAS ======= */
 body.light-mode .cell {
     background-color: #c2c1c1;
@@ -304,6 +407,42 @@ body.light-mode .cell {
 
 body.light-mode .cell.open {
     background-color: #e5e7eb;
+}
+
+/* ======= Bienvenida ======= */
+/* Modo claro - Welcome Modal */
+body.light-mode #welcomeModal {
+    background-color: rgba(255, 255, 255, 0.95); /* fondo claro */
+}
+
+body.light-mode #welcomeModal .modal-content {
+    background-color: #ffffff; /* contenedor blanco */
+    color: #2e3440;           /* texto oscuro */
+}
+
+/* Forzar todos los elementos de texto dentro del modal */
+body.light-mode #welcomeModal .modal-content h2,
+body.light-mode #welcomeModal .modal-content h3,
+body.light-mode #welcomeModal .modal-content p,
+body.light-mode #welcomeModal .modal-content li,
+body.light-mode #welcomeModal .modal-content ul,
+body.light-mode #welcomeModal .modal-content strong {
+    color: #2e3440;
+}
+
+/* Botón */
+body.light-mode #welcomeModal #closeModalBtn {
+    background-color: #4c8ed9;
+    color: white;
+}
+
+body.light-mode #welcomeModal #closeModalBtn:hover {
+    background-color: #6da9e8;
+}
+
+/* Separadores */
+body.light-mode #welcomeModal .separator {
+    border-top: 2px solid #c0c0c0;
 }
 
 /* ======= CONFIGURACIÓN ======= */
@@ -362,7 +501,7 @@ body.light-mode #gameStatusBar {
 }
 
 body.light-mode #tipBar {
-    background-color: #dcdcdc;
+    background-color: #f0f0f0;
     color: #2e3440;
 }
 
@@ -391,21 +530,21 @@ body.light-mode #themeToggle:hover {
 body.light-mode .config-container {
     background-color: transparent; /* o gris muy claro */
 }
-
+/* Modo claro - Patch Notes Modal */
 body.light-mode #patch-notes-modal {
-    background-color: rgba(197, 197, 197, 0.6); /* 0.6 = 60% opaco, 40% transparente */
+    background-color: rgba(255, 255, 255, 0.60); /* fondo claro y sólido */
 }
 
-
-/* ======= PATCH NOTES MODAL ======= */
-body.light-mode #patch-notes-modal .modal-content {
-    background-color: #ffffff;
-    color: #2e3440;
+body.light-mode #patch-notes-modal .modal-content,
+body.light-mode #patch-notes-modal .config-modal-content {
+    background-color: #ffffff; /* contenedores internos también claros */
+    color: #2e3440;           /* texto oscuro */
 }
 
-body.light-mode #patch-notes-modal h2,
+body.light-mode #patch-notes-modal h2#patch-notes-title,
+body.light-mode #patch-notes-modal h3,
 body.light-mode #patch-notes-modal p {
-    color: #2e3440; /* título y párrafos en oscuro */
+    color: #2e3440; /* todos los títulos y párrafos del modal */
 }
 
 body.light-mode #patch-notes-modal #close-patch-notes-btn {
@@ -416,6 +555,7 @@ body.light-mode #patch-notes-modal #close-patch-notes-btn {
 body.light-mode #patch-notes-modal #close-patch-notes-btn:hover {
     background-color: #6da9e8;
 }
+
 
 
 /* ======= CONFIG MENÚ ======= */
@@ -505,11 +645,15 @@ body.light-mode #patch-notes-modal #close-patch-notes-btn:hover {
   border-radius: 15px;
   max-width: 400px;
   width: 90%;
+  max-height: 80vh;        /* máximo alto visible */
+  overflow-y: auto;         /* scroll vertical */
+  overflow-x: hidden;       /* sin scroll horizontal */
   box-shadow: 0 0 25px rgba(30, 60, 110, 0.9);
   text-align: left;
   font-size: 16px;
   font-weight: 500;
   user-select: text;
+  position: relative;       /* necesario para el botón flotante */
 }
 
 #patch-notes-modal h2 {
@@ -538,18 +682,27 @@ body.light-mode #patch-notes-modal #close-patch-notes-btn:hover {
 }
 
 #patch-notes-modal #close-patch-notes-btn {
-  display: block;
-  margin: 20px auto 0 auto;
-  padding: 12px 30px;
-  background-color: #4a5d88;
+  position: fixed;
+  bottom: 20px;       /* distancia desde el borde inferior */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1300;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #434c5e;
+  color: #eceff4;
   border: none;
-  border-radius: 12px;
-  color: #dfe3e8;
-  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: fit-content;
 }
+.separator {
+  border: none;
+  border-top: 2px solid #4c566a;  /* color de la línea */
+  margin: 15px 0;                 /* separación arriba y abajo */
+  width: 100%;                      /* ancho de la línea */
+  border-radius: 2px;              /* bordes suaves */
+}
+
 
 #patch-notes-modal #close-patch-notes-btn:hover {
   background-color: #5c72b1;
@@ -584,22 +737,29 @@ body.light-mode #patch-notes-modal #close-patch-notes-btn:hover {
   -webkit-overflow-scrolling: touch;
   touch-action: pinch-zoom pan-x pan-y;
   overscroll-behavior: contain;
-  display: flex;
-  justify-content: center;
-  align-items: start;
+
+  display: block;          /* ⚠️ cambiar de flex a block */
+  text-align: center;      /* centrado horizontal del tablero */
 
   /* Ocultar scrollbar */
   -ms-overflow-style: none;  /* IE y Edge */
   scrollbar-width: none;     /* Firefox */
 }
+
 #board-container::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
-  #board {
-    grid-template-columns: repeat(auto-fill, minmax(25px, 1fr));
-    justify-content: start !important;
-    margin-top: 15px;
-  }
+ #board {
+  display: inline-grid;           /* inline para respetar el centrado */
+  grid-template-columns: repeat(var(--board-width), 30px);  /* ancho fijo por celda */
+  grid-template-rows: repeat(var(--board-height), 30px);    /* alto fijo por celda */
+  margin: 15px auto 0 auto;       /* centrado horizontal y margen superior */
+  user-select: none;
+  transform-origin: top left;
+  min-width: max-content;
+  min-height: max-content;
+}
+
 
   .cell {
     width: 25px;
@@ -618,4 +778,10 @@ body.light-mode #patch-notes-modal #close-patch-notes-btn:hover {
   .config-container #config-dropdown button { font-size: 13px; padding: 8px 16px; margin: 2px 5px; }
   #themeToggle { width: 40px; height: 40px; font-size: 20px; bottom: 15px; right: 15px; }
   #patch-notes-modal .modal-content { width: 100%; padding: 20px 15px; font-size: 14px; }
+}
+
+.patch-notes-content {
+  max-height: 70vh; /* altura máxima relativa a la pantalla */
+  overflow-y: auto; /* scroll vertical */
+  padding-right: 10px; /* espacio para scrollbar oculto */
 }

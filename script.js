@@ -21,7 +21,7 @@ const tips = [
     "💡 Consejo: No te apresures a destapar casillas; una acción rápida puede causar una explosión inesperada 💣.",
     "💡 Consejo: Observa patrones en el tablero para deducir dónde están las minas 💣.",
     "💡 Consejo: Usa las preguntas ❔ para marcar casillas dudosas y volver a ellas más tarde.",
-    "💡 Consejo: Recuerda que el primer clic nunca será una mina 💣, ¡aprovecha para abrir una zona segura!",
+    "💡 Consejo: Recuerda que la primer casilla en revelarse nunca será una mina 💣, ¡aprovecha para abrir una zona segura!",
     "💡 Consejo: Mantén la calma y analiza cada movimiento cuidadosamente para evitar errores.",
     "💡 Consejo: Practica regularmente para mejorar tus habilidades y estrategias en el juego.",
     "💡 Consejo: Si te sientes atascado, toma un descanso y vuelve con una mente fresca.",
@@ -37,22 +37,22 @@ const tips = [
     "💡 Consejo: Un poco de suerte 🍀 y mucho café ☕ no están de más.",
     "💡 Consejo: A veces hablar con los números es la mejor opción",
     "💡 Consejo: A veces lo mejor es lanzar una moneda 🪙 al aire",
-    "💡 Consejo: Tomar un vaso de agua 🫗 puede alivianar el estrés",
+    "💡 Consejo: Toma un vaso de agua 🫗 puede alivianar el estrés",
     "💡 Consejo: Recuerda tomar descansos de vez en cuando",
     "💡 Consejo: Si dudas, pon una marca ❔. Mejor prevenir que explotar una mina 💣.",
-    "💡 Consejo: La lógica gana más que la suerte 🍀. ¡Piensa antes de hacer clic!",
+    "💡 Consejo: La lógica gana más que la suerte 🍀. ¡Piensa antes de revelar una casilla!",
     "💡 Consejo: ¿Te quedan pocas opciones? ¡Confía en tu instinto y tu suerte 🍀!",
     "💡 Consejo: Bandera 🚩 no es adorno, es estrategia.",
     "💡 Consejo: ¿Demasiadas minas 💣 cerca? ¡Marca y despeja con cabeza!",
-    "💡 Consejo: En un 50/50, la moneda🪙 decide. ¡Solo que no siempre te quiere!",
+    "💡 Consejo: En un 50/50, la moneda 🪙 decide. ¡Solo que no siempre te quiere!",
     "💡 Consejo: ¿Dos opciones y una mina 💣? ¡Moneda🪙 al aire y que gane el destino!",
     "💡 Consejo: Suerte 🍀 no es estrategia, pero a veces es todo lo que tienes.",
     "💡 Consejo: Si juegas las suficientes partidas eventualmente podrías ganar en un solo movimiento, pero no lo consideraría una opción",
-    "💡 Consejo: Si, podrías ganar haciendo click aleatoriamente y con una suerte 🍀 impresionante, pero no lo llames estrategia",
+    "💡 Consejo: Si, podrías ganar haciendo revelando casillas aleatoriamente y con una suerte 🍀 impresionante, pero no lo llames estrategia",
     "💡 Consejo: Una pausa puede ser más poderosa que una bandera 🚩.",
     "💡 Consejo: Revisa la hora 🕑 antes de gritar, la tienes en una esquina",
     "💡 Consejo: Hay una leyenda de un número 8, ¿podrás encontrarlo?",
-    "💡 Consejo: Hacer click aleatoriamente también es una estrategia, ¿no?",
+    "💡 Consejo: Hacer revelar casillas aleatoriamente también es una estrategia, ¿no?",
     "💡 Consejo: FSM_TacoBell fue quien probó el funcionamiento del juego por horas en su fase temprana para dar criticas y desarrollar mejor el juego",
     "💡 Consejo: Nadie ha ganado el juego en tamaño de tablero insano y dificultad insana, ¿quieres intentarlo?",
 ];
@@ -68,12 +68,12 @@ const boardSizes = {
 };
 
 const difficultyRatios = {
-    Veasy: 0.05,
-    easy: 0.10,
-    normal: 0.17,
-    hard: 0.28,
-    extreme: 0.38,
-    insane: 0.45,
+    Veasy: 0.07,
+    easy: 0.12,
+    normal: 0.19,
+    hard: 0.26,
+    extreme: 0.32,
+    insane: 0.40,
 };
 
 function onBoardSizeChange() {
@@ -98,11 +98,59 @@ function obtenerTip() {
   return tips[randomIndex];
 }
 
+// Botón de configuración y dropdown
+const configButton = document.getElementById('config-button');
+const configDropdown = document.getElementById('config-dropdown');
+
+// Modal de notas de parche
+const patchNotesButton = document.getElementById('patch-notes-button');
+const patchNotesModal = document.getElementById('patch-notes-modal');
+const closePatchNotesBtn = document.getElementById('close-patch-notes-btn');
+
+// Función para mostrar/ocultar dropdown
+configButton.addEventListener('click', (e) => {
+  e.stopPropagation(); // Evitar que el click cierre inmediatamente
+  const isOpen = configDropdown.style.display === 'flex';
+  configDropdown.style.display = isOpen ? 'none' : 'flex';
+  configButton.setAttribute('aria-expanded', !isOpen);
+});
+
+// Cerrar dropdown al hacer click fuera
+document.addEventListener('click', (e) => {
+  if (!configButton.contains(e.target) && !configDropdown.contains(e.target)) {
+    configDropdown.style.display = 'none';
+    configButton.setAttribute('aria-expanded', false);
+  }
+});
+
+// Abrir modal de notas de parche
+patchNotesButton.addEventListener('click', () => {
+  patchNotesModal.style.display = 'flex';
+  configDropdown.style.display = 'none'; // cerrar dropdown al abrir modal
+  document.body.style.overflow = 'hidden'; // bloquear scroll de fondo
+});
+
+// Cerrar modal al presionar botón
+closePatchNotesBtn.addEventListener('click', () => {
+  patchNotesModal.style.display = 'none';
+  document.body.style.overflow = 'auto'; // restaurar scroll de fondo
+});
+
+// Cerrar modal al hacer click fuera del contenido
+patchNotesModal.addEventListener('click', (e) => {
+  if (e.target === patchNotesModal) {
+    patchNotesModal.style.display = 'none';
+    document.body.style.overflow = 'auto'; // restaurar scroll de fondo
+  }
+});
+
+
+
 
 function startGame() {
     let width, height;
     const size = document.getElementById('boardSize').value;
-    
+
     if (size === 'custom') {
         width = parseInt(document.getElementById('customWidth').value);
         height = parseInt(document.getElementById('customHeight').value);
@@ -128,13 +176,10 @@ function startGame() {
     const boardEl = document.getElementById('board');
     boardEl.innerHTML = '';
 
-    // 🔹 tamaño dinámico de celda (máx 30px, ajustado al ancho de pantalla)
-    const cellSize = Math.min(30, Math.floor(window.innerWidth / width * 0.9));
+    // ← Aquí pones el tamaño fijo antes de crear celdas
+    const cellSize = 30; 
     boardEl.style.gridTemplateColumns = `repeat(${width}, ${cellSize}px)`;
     boardEl.style.gridTemplateRows = `repeat(${height}, ${cellSize}px)`;
-
-    resetTimer();
-    document.getElementById('retryButton').style.display = 'none';
 
     board = [];
 
@@ -153,30 +198,10 @@ function startGame() {
             };
 
             cell.element.classList.add('cell');
-
-            // 🖱️ PC: click izquierdo
             cell.element.addEventListener('click', () => handleLeftClick(cell));
-
-            // 🖱️ PC: click derecho
             cell.element.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
                 handleRightClick(cell);
-            });
-
-            // 📱 Móvil: toque corto = abrir, toque largo = bandera
-            let pressTimer;
-            cell.element.addEventListener("touchstart", () => {
-                pressTimer = setTimeout(() => {
-                    handleRightClick(cell); // 🚩
-                    pressTimer = null;
-                }, 200); // 0.2s presión
-            });
-
-            cell.element.addEventListener("touchend", () => {
-                if (pressTimer) {
-                    clearTimeout(pressTimer);
-                    handleLeftClick(cell); // abrir
-                }
             });
 
             boardEl.appendChild(cell.element);
@@ -186,28 +211,36 @@ function startGame() {
 }
 
 
+// --- Función para colocar minas después del primer click ---
 function placeMines(excludeRow, excludeCol) {
     let placed = 0;
     const rows = board.length;
     const cols = board[0].length;
 
     while (placed < mineCount) {
-    const r = Math.floor(Math.random() * rows);
-    const c = Math.floor(Math.random() * cols);
-    const isExcluded = Math.abs(r - excludeRow) <= 1 && Math.abs(c - excludeCol) <= 1;
+        const r = Math.floor(Math.random() * rows);
+        const c = Math.floor(Math.random() * cols);
+        const isExcluded = Math.abs(r - excludeRow) <= 1 && Math.abs(c - excludeCol) <= 1;
 
-    if (!board[r][c].mine && !isExcluded) {
-        board[r][c].mine = true;
-        placed++;
-    }
+        if (!board[r][c].mine && !isExcluded) {
+            board[r][c].mine = true;
+            placed++;
+        }
     }
 
+    // --- Contar minas adyacentes ---
     for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-        board[r][c].adjacent = countAdjacentMines(r, c);
-    }
+        for (let c = 0; c < cols; c++) {
+            board[r][c].adjacent = countAdjacentMines(r, c);
+        }
     }
 }
+
+// --- Cerrar ventana modal ---
+document.getElementById('closeModalBtn').addEventListener('click', () => {
+    document.getElementById('welcomeModal').style.display = 'none';
+});
+
 
 function countAdjacentMines(r, c) {
     let count = 0;
@@ -384,6 +417,7 @@ function resetTimer() {
 }
 
 function retryGame() {
+    document.getElementById('retryButton').style.display = 'none'; // ocultar botón
     startGame(); // reinicia el juego con los mismos parámetros
 }
 
@@ -495,75 +529,7 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
-function startGame() {
-    // Reinicia estado pero NO inicia timer ni coloca minas
-    let width, height;
-    const size = document.getElementById('boardSize').value;
 
-    if (size === 'custom') {
-        width = parseInt(document.getElementById('customWidth').value);
-        height = parseInt(document.getElementById('customHeight').value);
-        mineCount = parseInt(document.getElementById('customMines').value);
-    } else {
-        width = boardSizes[size];
-        height = Math.ceil(width * 0.8);
-        const difficulty = document.getElementById('difficulty').value;
-        const ratio = difficultyRatios[difficulty];
-        mineCount = Math.round(width * height * ratio);
-    }
-
-    if (mineCount >= width * height) mineCount = width * height - 1;
-    if (mineCount < 1) mineCount = 1;
-
-    flagsLeft = mineCount;
-    gameOver = false;
-    firstClick = true;  // El primer click iniciará minas y tiempo
-    cellsOpened = 0;
-
-    document.getElementById('flagsLeft').innerText = flagsLeft;
-
-    const boardEl = document.getElementById('board');
-    boardEl.innerHTML = '';
-    boardEl.style.gridTemplateColumns = `repeat(${width}, 30px)`;
-    boardEl.style.gridTemplateRows = `repeat(${height}, 30px)`;
-
-    resetTimer();
-    document.getElementById('retryButton').style.display = 'none';
-
-    board = [];
-
-    for (let r = 0; r < height; r++) {
-        board[r] = [];
-        for (let c = 0; c < width; c++) {
-            const cell = {
-                row: r,
-                col: c,
-                mine: false,
-                opened: false,
-                flagged: false,
-                question: false,
-                element: document.createElement('div'),
-                adjacent: 0
-            };
-
-            cell.element.classList.add('cell');
-            cell.element.addEventListener('click', () => handleLeftClick(cell));
-            cell.element.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                handleRightClick(cell);
-            });
-
-            boardEl.appendChild(cell.element);
-            board[r][c] = cell;
-        }
-    }
-}
-
-// Cerrar ventana modal al hacer clic en el botón
-document.getElementById('closeModalBtn').addEventListener('click', () => {
-    const modal = document.getElementById('welcomeModal');
-    modal.style.display = 'none';
-});
 
 const themeToggle = document.getElementById("themeToggle");
 let isLight = false;
@@ -573,135 +539,3 @@ themeToggle.addEventListener("click", () => {
     isLight = !isLight;
     themeToggle.textContent = isLight ? "☀️" : "🌙";
 });
-
-// Referencias a elementos
-const configButton = document.getElementById('config-button');
-const configDropdown = document.getElementById('config-dropdown');
-const patchNotesButton = document.getElementById('patch-notes-button');
-const patchNotesModal = document.getElementById('patch-notes-modal');
-const closePatchNotesBtn = document.getElementById('close-patch-notes-btn');
-
-// Función para ocultar dropdown
-function hideDropdown() {
-  configDropdown.style.display = 'none';
-  configButton.setAttribute('aria-expanded', 'false');
-}
-
-// Función para mostrar dropdown
-function showDropdown() {
-  configDropdown.style.display = 'flex';
-  configButton.setAttribute('aria-expanded', 'true');
-}
-
-// Alternar dropdown
-function toggleDropdown() {
-  if (configDropdown.style.display === 'flex') {
-    hideDropdown();
-  } else {
-    showDropdown();
-  }
-}
-
-// Abrir modal de notas de parche
-function openPatchNotes() {
-  patchNotesModal.style.display = 'flex';
-  hideDropdown();
-  patchNotesModal.focus();
-}
-
-// Cerrar modal de notas de parche
-function closePatchNotes() {
-  patchNotesModal.style.display = 'none';
-  configButton.focus();
-}
-
-// Event listeners
-
-// Al hacer click en botón Configuraciones
-configButton.addEventListener('click', (e) => {
-  e.stopPropagation(); // Para que no cierre al hacer click en el mismo botón
-  toggleDropdown();
-});
-
-// Al hacer click en botón Notas de parche
-patchNotesButton.addEventListener('click', (e) => {
-  e.stopPropagation();
-  openPatchNotes();
-});
-
-// Al hacer click en botón Cerrar modal
-closePatchNotesBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  closePatchNotes();
-});
-
-// Cerrar dropdown o modal si se hace click fuera
-document.addEventListener('click', (e) => {
-  const target = e.target;
-  
-  // Si el modal está abierto y el click es fuera del modal-content, cerrar modal
-  if (patchNotesModal.style.display === 'flex' && !patchNotesModal.contains(target)) {
-    closePatchNotes();
-  }
-  
-  // Si el dropdown está abierto y el click es fuera del dropdown y del botón, cerrar dropdown
-  if (configDropdown.style.display === 'flex' && 
-      target !== configButton && 
-      !configDropdown.contains(target)) {
-    hideDropdown();
-  }
-});
-
-// Opcional: cerrar modal con tecla Escape
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    if (patchNotesModal.style.display === 'flex') {
-      closePatchNotes();
-    } else if (configDropdown.style.display === 'flex') {
-      hideDropdown();
-    }
-  }
-});
-
-if (!("ontouchstart" in window)) {
-    document.addEventListener("keydown", (event) => {
-        // aquí tu lógica de teclado
-    });
-}
-
-let scale = 1;
-const boardEl = document.getElementById("board");
-const container = document.getElementById("board-container");
-
-let initialDistance = null;
-let initialScale = 1;
-
-container.addEventListener("touchstart", (e) => {
-  if (e.touches.length === 2) {
-    e.preventDefault();
-    initialDistance = getDistance(e.touches[0], e.touches[1]);
-    initialScale = scale;
-  }
-}, { passive: false });
-
-container.addEventListener("touchmove", (e) => {
-  if (e.touches.length === 2 && initialDistance) {
-    e.preventDefault();
-    const currentDistance = getDistance(e.touches[0], e.touches[1]);
-    scale = initialScale * (currentDistance / initialDistance);
-    scale = Math.max(0.5, Math.min(scale, 3)); // límite entre 50% y 300%
-    boardEl.style.transform = `scale(${scale})`;
-  }
-}, { passive: false });
-
-container.addEventListener("touchend", (e) => {
-  if (e.touches.length < 2) {
-    initialDistance = null;
-  }
-});
-
-function getDistance(touch1, touch2) {
-  const dx = touch2.clientX - touch1.clientX;
-  const dy = touch2.clientY - touch1.clientY;
-  return Math.sqrt(dx * dx + dy * dy);
-}

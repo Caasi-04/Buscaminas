@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Buscaminas</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2216%22>💣</text></svg>">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <!-- Contenedor del botón Configuraciones -->
+<div class="config-container">
+
+  <!-- Botón Configuraciones -->
+  <button class="config-button" id="config-button" aria-haspopup="true" aria-expanded="false">
+    ⚙️
+  </button>
+
+  <!-- Dropdown con opciones -->
+  <div class="config-dropdown" id="config-dropdown" role="menu" aria-label="Opciones de configuración">
+    <button id="patch-notes-button" role="menuitem" tabindex="0">
+      Notas de parche
+    </button>
+  </div>
+</div>
+
+<!-- Modal para Notas de parche -->
+<div class="config-modal config-patch-notes-modal" id="patch-notes-modal" role="dialog" aria-modal="true" aria-labelledby="patch-notes-title" tabindex="-1" style="display: none;">
+
+  <div class="config-modal-content">
+    <h2 id="patch-notes-title">Notas de parche</h2>
+    <div class="patch-notes-content" style="text-align: left;">
+      <!-- Aquí puedes poner el contenido real de las notas -->
+      <h3>Versión 2.0.0</h3>
+      <ul>
+        <li>Adaptación total para dispositivos móviles</li>
+        <li>Arreglo de un bug que no cambiaba totalmente al pasar al modo claro</li>
+        <li>Ahora, si la pantalla es muy pequeña, el tablero se ajusta a la pantalla</li>
+        <li>Mejoras en la interfaz de usuario</li>
+        <li>Se redujo el tiempo necesario para colocar una bandera o marca a 0.5 segundos en dispositivos móviles</li>
+        <li>Corrección de varios errores menores</li>
+        <li>Mejoras en el rendimiento general del juego</li>
+        <li>Optimización del código para una mejor mantenibilidad</li>
+        <li>Mejoras en la accesibilidad</li>
+        <li>Mejoras en la compatibilidad con navegadores</li>
+        <li>El mensaje inicial ahora se puede scrollear si es necesario</li>
+        <li>Se ocultaron las barras de desplazamiento en el mensaje inicial y en el tablero para una apariencia más limpia</li>
+        <li>Cambio al orden de presentación de las notas de parche</li>
+        <li>Se ajustaron los 💡Consejo para que funcionen tanto para dispositivos móviles como para ordenadores</li>
+        <li>La ventana inicial de controles y reglas se adaptó para ser útil para dispositivos móviles y ordenadores</li>
+        <li>Ahora no se puede hacer zoom en dispositivos, pero se aumentó el tamaño del tablero y casillas</li>
+        <li>Las dificultades muy fácil, fácil y normal ahora son un poco más complicadas</li>
+        <li>Las dificultades Difícil, Extremo e Insano ahora son menos complicadas</li>
+        <li>Se optimizaron varias animaciones</li>
+        <li>Ahora las banderas 🚩 y el tiempo 🕑 del intento actual no están a la par</li>
+        <li>En dispositivos móviles la sección con la hora, fecha y zona horaria ya no se coloca encima del tiempo 🕑</li>
+        <li>Se arregló el error que hacía que en dispositivos móviles el tablero se viera cortado</li>
+        <li>Se arregló el error que hacía que en dispositivos móviles el tablero no se centrara</li>
+        <li>Se arregló el error que hacía que en dispositivos móviles el tablero no se ajustara a la pantalla</li>
+        <li>Se arregló el error que hacía que en dispositivos móviles el botón de reintentar no se viera</li>
+        <li>Se arregló el error que hacía que en dispositivos móviles mantener mucho tiempo la pantalla presionada contara como 2 pulsaciones largas</li>
+      </ul>
+      <hr class="separator">
+      <h3>Versión 1.3.3</h3>
+      <ul>
+        <li>Creación de botón para configuraciones, el cual solo muestra las notas de parche</li>
+      </ul>
+      <hr class="separator">
+      <h3>Versión 1.3.2</h3>
+      <ul>
+        <li>Disponibilidad de un botón para alternar el modo oscuro y claro</li>
+      </ul>
+
+      
+    </div>
+    <button class="config-close-btn" id="close-patch-notes-btn">Cerrar</button>
+  </div>
+</div>
+
+
+  <h1>💣 Buscaminas</h1>
+
+  <div id="config">
+    <label>
+      Tamaño:
+      <select id="boardSize" onchange="onBoardSizeChange()">
+        <option value="mini">Mini</option>
+        <option value="small">Pequeño</option>
+        <option value="medium" selected>Mediano</option>
+        <option value="large">Grande</option>
+        <option value="huge">Enorme</option>
+        <option value="insane">Insano</option>
+        <option value="custom">Personalizado</option>
+      </select>
+    </label>
+
+    <label id="difficultyLabel">
+      Dificultad:
+      <select id="difficulty">
+        <option value="Veasy">Muy Fácil</option>
+        <option value="easy" >Fácil</option>
+        <option value="normal"selected>Normal</option>
+        <option value="hard">Difícil</option>
+        <option value="extreme">Extremo</option>
+        <option value="insane">Insano</option>
+      </select>
+    </label>
+
+    <div id="customSettings">
+      <label>
+        Ancho:
+        <input type="number" id="customWidth" min="5" value="15" />
+      </label>
+      <label>
+        Alto:
+        <input type="number" id="customHeight" min="5" value="12" />
+      </label>
+      <label id="customMinesLabel" style="display: none;">
+        Minas:
+        <input type="number" id="customMines" min="1" value="20" />
+      </label>
+    </div>
+
+    
+  </div>
+
+  <div id="gameStatusBar">
+    <div id="flagCounter">🚩 Banderas restantes: <span id="flagsLeft">0</span></div>
+
+    <div id="timer">⏱ Tiempo: <span id="timeElapsed">00:00:00</span></div>
+  </div>
+  <div id="totalTimer">⏱ Tiempo total jugado: <span id="totalTime">00:00:00</span></div>
+  <div id="attemptCounter">🎮 Intentos realizados: <span id="attempts">0</span></div>
+
+  <button id="retryButton" onclick="retryGame()" style="display:none; margin-top: 10px;">🔁 Volver a intentar</button>
+  <!-- Barra de consejos -->
+  <div id="tipBar" style="margin-top: 15px; font-style: italic; font-size: 16px; color: #bdb8b7;">
+    💡Consejo: Para colocar una bandera 🚩, haz clic derecho o manten presionada en una celda.
+  </div>
+
+  <!-- Ventana modal, oculta al principio -->
+  <div id="welcomeModal" class="modal" style="display: flex;">
+    <div class="modal-content">
+      <h2>🎮 ¡Bienvenido a Buscaminas!</h2>
+      <p>Objetivo del juego:  </p>
+
+     <ul style="text-align: left;">
+      <li>Revela todas las celdas sin minas 💣 para ganar.</li>
+      <li>Si revelas una mina 💣, pierdes.</li>
+     </ul>
+      
+    
+    <hr class="separator">
+    <p>
+      Reglas:
+    </p>
+    <ul style="text-align: left;">
+      <li>Al hacer clic o presionar una celda la reveleará</li>
+      <li>La primer casilla en presionar <strong>nunca</strong> es una mina 💣</li>
+      <li>Aparecerán unos números, este número indica la cantidad de minas 💣 que hay <strong>alrededor</strong></li>
+      <li>Las <strong>8 celdas</strong> que rodean cualquier casilla son consideredas <strong>alrededor</strong></li>
+      <li>Abrir una celda <strong>con mina 💣</strong> terminara el juego en derrota</li>
+      <li>Para ganar, debes abrir <strong>todas</strong> las celdas que <strong>no</strong> contienen minas 💣</li>
+      <li>Las banderas 🚩 y las marcas ❔ no afectan el juego, son <strong>solo una guia</strong></li>
+      <li>Las celdas <strong>con</strong> una bandera 🚩 se bloquean y <strong>no</strong> pueden ser abiertas</li>
+      <li>Las celdas <strong>con</strong> marca ❔ <strong>si</strong> pueden ser abiertas</li>
+      <li>Si revelas una celda con <strong>0 minas 💣 alrededor</strong>, se revelarán automáticamente las celdas adyacentes</li>
+      <li>Al inicio de la partida hay un contador de <strong>banderas 🚩 restantes</strong>, la partida <strong>inicia</strong> con una cantidad de <strong>banderas igual al total de minas 💣</strong></li>
+    </ul>
+    <hr class="separator">
+    <p>
+      Aquí están los controles básicos:
+    </p>
+    <ul style="text-align: left;">
+      <li>🖱️ <strong>Clic Izquierdo o tocar</strong>: Revelar celda</li>
+      <li>🖱️ <strong>Clic Derecho o mantener</strong>: Colocar bandera 🚩</li>
+      <li>🖱️ <strong>Clic Derecho o mantener</strong>: Sobre una bandera 🚩 para colocar marca ❔ </li>
+      <li>⏎ <strong>Enter</strong> o <strong>Espacio</strong>: Reintentar cuando pierdas</li>
+      <li>⚙️ Cambia el tamaño o dificultad desde el menú superior</li>
+    </ul>
+      <button id="closeModalBtn">¡Entendido!</button>
+    </div>
+  </div>
+
+  <div id="board-container">
+    <div id="board"></div>
+  </div>
+  
+
+  <footer style="margin-top: 20px; font-size: 14px; color: #888;">
+    Created by Caasi04
+    <br />
+    version 2.0.0
+  </footer>
+  <div id="clockOverlay"></div>
+ 
+  <button id="themeToggle" title="Cambiar tema">🌙</button>
+  <script src="script.js"></script>
+</body>
+</html>
