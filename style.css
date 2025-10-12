@@ -116,6 +116,93 @@ h1 {
   transform-origin: top left;
 }
 
+/* ======= FEEDBACK MODAL ======= */
+#feedback-modal {
+  display: none; /* inicialmente oculto */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(35, 40, 50, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1200;
+  user-select: none;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#feedback-modal .modal-content {
+  background-color: #323b49;
+  color: #dfe3e8;
+  padding: 25px 30px;
+  border-radius: 15px;
+  max-width: 400px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 0 25px rgba(30, 60, 110, 0.9);
+  text-align: left;
+  font-size: 16px;
+  font-weight: 500;
+  position: relative;
+}
+
+#feedback-modal h2 {
+  color: #7da2c9;
+  font-weight: 700;
+  font-size: 1.8em;
+  margin-bottom: 15px;
+}
+
+#feedback-modal label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+#feedback-modal input,
+#feedback-modal textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #4c566a;
+  background-color: #3b4252;
+  color: #eceff4;
+  font-size: 14px;
+  box-sizing: border-box;
+  resize: vertical;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+#feedback-modal input:focus,
+#feedback-modal textarea:focus {
+  outline: none;
+  border-color: #5e81ac;
+  background-color: #434c5e;
+}
+
+#feedback-modal button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px 0;
+  background-color: #5e81ac;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#feedback-modal button:hover {
+  background-color: #81a1c1;
+}
 
 
 
@@ -408,6 +495,40 @@ body.light-mode .cell {
 body.light-mode .cell.open {
     background-color: #e5e7eb;
 }
+
+
+/* ======= MODO CLARO FEEDBACK ======= */
+body.light-mode #feedback-modal {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+body.light-mode #feedback-modal .modal-content {
+  background-color: #ffffff;
+  color: #2e3440;
+}
+
+body.light-mode #feedback-modal input,
+body.light-mode #feedback-modal textarea {
+  background-color: #e5e7eb;
+  color: #2e3440;
+  border: 1px solid #a0aec0;
+}
+
+body.light-mode #feedback-modal input:focus,
+body.light-mode #feedback-modal textarea:focus {
+  border-color: #4c8ed9;
+  background-color: #ffffff;
+}
+
+body.light-mode #feedback-modal button {
+  background-color: #4c8ed9;
+  color: white;
+}
+
+body.light-mode #feedback-modal button:hover {
+  background-color: #6da9e8;
+}
+
 
 /* ======= Bienvenida ======= */
 /* Modo claro - Welcome Modal */

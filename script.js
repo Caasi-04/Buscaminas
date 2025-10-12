@@ -263,6 +263,7 @@ function handleLeftClick(cell) {
         placeMines(cell.row, cell.col);
         firstClick = false;
         startTimer();  // ⏱ Iniciar cronómetro
+        startTotalTimer(); // Iniciar cronómetro total
     }
 
     openCell(cell);
@@ -406,6 +407,11 @@ function startTimer() {
     }, 1000);
 }
 
+function resetTimerToZero() { // Reinicia el cronómetro de partida actual a 00:00:00
+    clearInterval(timerInterval);
+    startTime = null;
+    document.getElementById('timeElapsed').innerText = '00:00:00';
+}
 
 function stopTimer() {
     clearInterval(timerInterval);
@@ -418,6 +424,7 @@ function resetTimer() {
 
 function retryGame() {
     document.getElementById('retryButton').style.display = 'none'; // ocultar botón
+    resetTimerToZero(); // reiniciar cronómetro a 00:00:00
     startGame(); // reinicia el juego con los mismos parámetros
 }
 
@@ -466,9 +473,15 @@ window.addEventListener('load', updateClock);
 
 
 window.onload = () => {
+      // Detectar cambios en parámetros y actualizar juego automáticamente
+    document.getElementById('boardSize').addEventListener('change', startGame);
+    document.getElementById('difficulty').addEventListener('change', startGame);
+    document.getElementById('customWidth').addEventListener('input', startGame);
+    document.getElementById('customHeight').addEventListener('input', startGame);
+    document.getElementById('customMines').addEventListener('input', startGame);
+
     onBoardSizeChange();
     startGame();
-    startTotalTimer();
 };
 
 function formatTime(ms) {
@@ -494,30 +507,12 @@ document.addEventListener('keydown', function (e) {
 });
 
 document.addEventListener('keydown', function(e) {
-  if (e.key === ' ' || e.key === 'Spacebar') {
-    e.preventDefault(); // Siempre previene el scroll con espacio
+  const tag = document.activeElement.tagName;
+  if ((e.key === ' ' || e.key === 'Spacebar') && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+    e.preventDefault(); // previene scroll solo fuera de inputs/textareas
   }
 });
 
-window.onload = () => {
-    // Detectar cambios en parámetros y actualizar juego automáticamente
-    document.getElementById('boardSize').addEventListener('change', startGame);
-    document.getElementById('difficulty').addEventListener('change', startGame);
-    document.getElementById('customWidth').addEventListener('input', startGame);
-    document.getElementById('customHeight').addEventListener('input', startGame);
-    document.getElementById('customMines').addEventListener('input', startGame);
-
-    onBoardSizeChange();
-    startGame();
-    startTotalTimer();
-};
-
-// Bloquear scroll por espacio siempre
-document.addEventListener('keydown', function(e) {
-  if (e.key === ' ' || e.key === 'Spacebar') {
-    e.preventDefault();
-  }
-});
 
 // Reiniciar juego con Enter o espacio, solo si el botón está visible
 document.addEventListener('keydown', function (e) {
